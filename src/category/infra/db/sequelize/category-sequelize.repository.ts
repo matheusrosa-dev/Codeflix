@@ -100,7 +100,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     const categorySearchResult = new CategorySearchResult({
       items: models.map((model) => CategoryModelMapper.toEntity(model)),
       current_page: props.page,
-      per_page: limit,
+      per_page: props.per_page,
       total: count,
     });
 
