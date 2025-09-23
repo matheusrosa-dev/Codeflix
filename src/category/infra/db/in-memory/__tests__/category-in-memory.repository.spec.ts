@@ -1,5 +1,5 @@
-import { SortDirection } from "../../../../shared/domain/repository/search-params";
-import { Category } from "../../../domain/category.entity";
+import { SortDirection } from "../../../../../shared/domain/repository/search-params";
+import { Category } from "../../../../domain/category.entity";
 import { CategoryInMemoryRepository } from "../category-in-memory.repository";
 
 describe("CategoryInMemoryRepository", () => {
