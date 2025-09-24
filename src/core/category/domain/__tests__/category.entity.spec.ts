@@ -3,9 +3,9 @@ import { Category } from "../category.entity";
 
 describe("Category Without Validator Unit Tests", () => {
   beforeEach(() => {
-    Category.prototype.validate = jest
+    Category.prototype["validate"] = jest
       .fn()
-      .mockImplementation(Category.prototype.validate);
+      .mockImplementation(Category.prototype["validate"]);
   });
   test("constructor of category", () => {
     let category = new Category({ name: "Movie" });
@@ -70,7 +70,7 @@ describe("Category Without Validator Unit Tests", () => {
       expect(category.description).toBeNull();
       expect(category.is_active).toBe(true);
       expect(category.created_at).toBeInstanceOf(Date);
-      expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
+      expect(Category.prototype["validate"]).toHaveBeenCalledTimes(1);
       expect(category.notification.hasErrors()).toBe(false);
     });
 
@@ -84,7 +84,7 @@ describe("Category Without Validator Unit Tests", () => {
       expect(category.description).toBe("some description");
       expect(category.is_active).toBe(true);
       expect(category.created_at).toBeInstanceOf(Date);
-      expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
+      expect(Category.prototype["validate"]).toHaveBeenCalledTimes(1);
       expect(category.notification.hasErrors()).toBe(false);
     });
 
@@ -98,7 +98,7 @@ describe("Category Without Validator Unit Tests", () => {
       expect(category.description).toBeNull();
       expect(category.is_active).toBe(false);
       expect(category.created_at).toBeInstanceOf(Date);
-      expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
+      expect(Category.prototype["validate"]).toHaveBeenCalledTimes(1);
       expect(category.notification.hasErrors()).toBe(false);
     });
   });
@@ -118,7 +118,7 @@ describe("Category Without Validator Unit Tests", () => {
     });
     category.changeName("other name");
     expect(category.name).toBe("other name");
-    expect(Category.prototype.validate).toHaveBeenCalledTimes(1);
+    expect(Category.prototype["validate"]).toHaveBeenCalledTimes(1);
     expect(category.notification.hasErrors()).toBe(false);
   });
 

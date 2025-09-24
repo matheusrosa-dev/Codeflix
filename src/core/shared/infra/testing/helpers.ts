@@ -4,7 +4,7 @@ import { Config } from "../config";
 export function setupSequelize(options: SequelizeOptions = {}) {
   let _sequelize: Sequelize;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     _sequelize = new Sequelize({
       ...options,
       ...Config.db(),

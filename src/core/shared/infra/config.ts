@@ -13,6 +13,7 @@ export class Config {
     Config.readEnv();
 
     return {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       dialect: "sqlite" as any,
       host: Config.env.DB_HOST,
       logging: false,
@@ -25,7 +26,7 @@ export class Config {
     }
 
     Config.env = readEnv({
-      path: join(__dirname, `../../../envs/.env.${process.env.NODE_ENV}`),
+      path: join(__dirname, `../../../../envs/.env.${process.env.NODE_ENV}`),
       quiet: true,
     }).parsed as Env;
   }
