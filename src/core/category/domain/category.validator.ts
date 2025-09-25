@@ -18,7 +18,7 @@ export class CategoryValidator extends ClassValidatorFields {
     return super.validate(
       notification,
       new CategoryRules(data),
-      fieldsToValidate
+      fieldsToValidate,
     );
   }
 }
