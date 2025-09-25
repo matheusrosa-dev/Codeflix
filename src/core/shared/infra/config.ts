@@ -1,5 +1,6 @@
 import { config as readEnv } from "dotenv";
 import { join } from "path";
+import { SequelizeOptions } from "sequelize-typescript";
 
 type Env = {
   DB_HOST: string;
@@ -9,12 +10,11 @@ type Env = {
 export class Config {
   static env: Env = null;
 
-  static db() {
+  static db(): SequelizeOptions {
     Config.readEnv();
 
     return {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      dialect: "sqlite" as any,
+      dialect: "sqlite",
       host: Config.env.DB_HOST,
       logging: false,
     };

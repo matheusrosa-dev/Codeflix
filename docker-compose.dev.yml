@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    command: ./.docker/start.sh
+    ports:
+      - "3333:3333"
+    volumes:
+      - .:/home/node/app
+
+  db:
+    image: mysql:8.0.30-debian
+    environment:
+      - MYSQL_DATABASE=micro_videos
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql:delegated
+    security_opt:
+      - seccomp:unconfined
