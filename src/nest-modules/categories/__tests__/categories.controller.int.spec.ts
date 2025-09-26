@@ -85,7 +85,6 @@ describe("CategoriesController Integration Tests", () => {
           category_id: presenter.id,
           created_at: presenter.created_at,
           name: expected.name ?? category.name,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           description:
             "description" in expected
               ? expected.description

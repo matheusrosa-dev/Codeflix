@@ -4,7 +4,6 @@ import { Notification } from "./notification";
 
 export abstract class ClassValidatorFields implements IValidatorFields {
   validate(notification: Notification, data: any, fields: string[]): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const errors = validateSync(data, {
       groups: fields,
     });

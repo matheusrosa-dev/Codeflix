@@ -19,13 +19,9 @@ describe("PaginationPresenter Unit Tests", () => {
 
     it("should set string number values", () => {
       const presenter = new PaginationPresenter({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         current_page: "1" as any,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         per_page: "2" as any,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         last_page: "3" as any,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         total: "4" as any,
       });
 
@@ -52,13 +48,9 @@ describe("PaginationPresenter Unit Tests", () => {
     });
 
     presenter = new PaginationPresenter({
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       current_page: "1" as any,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       per_page: "2" as any,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       last_page: "3" as any,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       total: "4" as any,
     });
 

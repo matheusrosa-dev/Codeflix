@@ -8,19 +8,15 @@ export type PaginationPresenterProps = {
 };
 
 export class PaginationPresenter {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   @Transform(({ value }) => parseInt(value))
   current_page: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   @Transform(({ value }) => parseInt(value))
   per_page: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   @Transform(({ value }) => parseInt(value))
   last_page: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   @Transform(({ value }) => parseInt(value))
   total: number;
 

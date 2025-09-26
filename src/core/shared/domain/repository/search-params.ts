@@ -41,7 +41,6 @@ export class SearchParams<SearchTerm = string> extends ValueObject {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this._page = parseInt(value as any);
   }
 

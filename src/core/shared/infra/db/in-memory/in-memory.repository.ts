@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/require-await */
 import { Entity } from "../../../domain/entity";
 import { NotFoundError } from "../../../domain/errors/not-found.error";
 import {
@@ -125,12 +124,10 @@ export abstract class InMemorySearchableRepository<
     }
 
     return [...items].sort((a, b) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const aValue = custom_getter
         ? custom_getter(sort, a)
         : a[sort as keyof typeof a];
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const bValue = custom_getter
         ? custom_getter(sort, b)
         : b[sort as keyof typeof b];

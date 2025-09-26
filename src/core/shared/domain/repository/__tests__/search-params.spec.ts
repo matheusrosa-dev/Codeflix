@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { SearchParams } from "../search-params";
 
 describe("SearchParams Unit Tests", () => {
