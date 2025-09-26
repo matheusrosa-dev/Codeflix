@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { Entity } from "../../../domain/entity";
 import { NotFoundError } from "../../../domain/errors/not-found.error";
 import {
@@ -13,7 +14,7 @@ import { ValueObject } from "../../../domain/value-object";
 
 export abstract class InMemoryRepository<
   E extends Entity,
-  EntityId extends ValueObject
+  EntityId extends ValueObject,
 > implements IRepository<E, EntityId>
 {
   items: E[] = [];
@@ -22,13 +23,13 @@ export abstract class InMemoryRepository<
     this.items.push(entity);
   }
 
-  async bulkInsert(entities: any[]): Promise<void> {
+  async bulkInsert(entities: E[]): Promise<void> {
     this.items.push(...entities);
   }
 
   async update(entity: E): Promise<void> {
     const index = this.items.findIndex((item) =>
-      item.entity_id.equals(entity.entity_id)
+      item.entity_id.equals(entity.entity_id),
     );
 
     if (index === -1) {
@@ -40,7 +41,7 @@ export abstract class InMemoryRepository<
 
   async delete(entity_id: EntityId): Promise<void> {
     const index = this.items.findIndex((item) =>
-      item.entity_id.equals(entity_id)
+      item.entity_id.equals(entity_id),
     );
 
     if (index === -1) {
@@ -68,7 +69,7 @@ export abstract class InMemoryRepository<
 export abstract class InMemorySearchableRepository<
     E extends Entity,
     EntityId extends ValueObject,
-    SearchTerm = string
+    SearchTerm = string,
   >
   extends InMemoryRepository<E, EntityId>
   implements ISearchableRepository<E, EntityId, SearchTerm>
@@ -78,19 +79,19 @@ export abstract class InMemorySearchableRepository<
   async search(props: SearchParams<SearchTerm>): Promise<SearchResult<E>> {
     const filteredItems = await this.applySearchTerm(
       this.items,
-      props.searchTerm
+      props.searchTerm,
     );
 
     const sortedItems = this.applySort(
       filteredItems,
       props.sort,
-      props.sort_dir
+      props.sort_dir,
     );
 
     const paginatedItems = this.applyPagination(
       sortedItems,
       props.page,
-      props.per_page
+      props.per_page,
     );
 
     return new SearchResult({
@@ -103,7 +104,7 @@ export abstract class InMemorySearchableRepository<
 
   protected abstract applySearchTerm(
     items: E[],
-    searchTerm: SearchTerm
+    searchTerm: SearchTerm,
   ): Promise<E[]>;
 
   protected applyPagination(items: E[], page: number, per_page: number) {
@@ -117,27 +118,29 @@ export abstract class InMemorySearchableRepository<
     items: E[],
     sort: string,
     sort_dir: SortDirection,
-    custom_getter?: (sort: string, item: E) => any
+    custom_getter?: (sort: string, item: E) => any,
   ) {
     if (!sort || !this.sortableFields.includes(sort)) {
       return items;
     }
 
     return [...items].sort((a, b) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const aValue = custom_getter
-        ? custom_getter(sort as string, a)
+        ? custom_getter(sort, a)
         : a[sort as keyof typeof a];
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const bValue = custom_getter
         ? custom_getter(sort, b)
         : b[sort as keyof typeof b];
 
       if (aValue < bValue) {
-        return sort_dir === "asc" ? -1 : 1;
+        return sort_dir === SortDirection.ASC ? -1 : 1;
       }
 
       if (aValue > bValue) {
-        return sort_dir === "asc" ? 1 : -1;
+        return sort_dir === SortDirection.ASC ? 1 : -1;
       }
 
       return 0;

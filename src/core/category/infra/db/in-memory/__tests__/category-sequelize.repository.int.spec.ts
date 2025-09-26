@@ -6,7 +6,7 @@ import { CategorySequelizeRepository } from "../../sequelize/category-sequelize.
 import { CategoryModel } from "../../sequelize/category.model";
 
 describe("CategorySequelizeRepository Integration Test", () => {
-  let sequelize;
+  let sequelize: Sequelize;
   let repository: CategorySequelizeRepository;
 
   beforeEach(async () => {
@@ -21,9 +21,9 @@ describe("CategorySequelizeRepository Integration Test", () => {
   });
 
   it("should inserts a new entity", async () => {
-    let category = Category.fake().oneCategory().build();
+    const category = Category.fake().oneCategory().build();
     await repository.insert(category);
-    let entity = await repository.findById(category.category_id);
+    const entity = await repository.findById(category.category_id);
     expect(entity.toJSON()).toStrictEqual(category.toJSON());
   });
 
@@ -48,7 +48,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
   it("should throw error on update when a entity not found", async () => {
     const entity = Category.fake().oneCategory().build();
     await expect(repository.update(entity)).rejects.toThrow(
-      new NotFoundError(entity.category_id.id, Category)
+      new NotFoundError(entity.category_id.id, Category),
     );
   });
 
@@ -66,7 +66,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
   it("should throw error on delete when a entity not found", async () => {
     const categoryId = new Uuid();
     await expect(repository.delete(categoryId)).rejects.toThrow(
-      new NotFoundError(categoryId.id, Category)
+      new NotFoundError(categoryId.id, Category),
     );
   });
 

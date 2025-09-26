@@ -43,9 +43,10 @@ class StubInMemorySearchableRepository extends InMemorySearchableRepository<
     return StubEntity;
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   protected async applySearchTerm(
     items: StubEntity[],
-    searchTerm: string | null
+    searchTerm: string | null,
   ): Promise<StubEntity[]> {
     if (!searchTerm) {
       return items;
@@ -98,48 +99,40 @@ describe("InMemorySearchableRepository Unit Tests", () => {
   });
 
   describe("applySort method", () => {
-    it("should no sort items", async () => {
+    it("should no sort items", () => {
       const items = [
         new StubEntity({ name: "b", price: 5 }),
         new StubEntity({ name: "a", price: 5 }),
       ];
 
-      let itemsSorted = await repository["applySort"](items, null, null);
+      let itemsSorted = repository["applySort"](items, null, null);
       expect(itemsSorted).toStrictEqual(items);
 
-      itemsSorted = await repository["applySort"](
-        items,
-        "price",
-        SortDirection.ASC
-      );
+      itemsSorted = repository["applySort"](items, "price", SortDirection.ASC);
       expect(itemsSorted).toStrictEqual(items);
     });
 
-    it("should sort items", async () => {
+    it("should sort items", () => {
       const items = [
         new StubEntity({ name: "b", price: 5 }),
         new StubEntity({ name: "a", price: 5 }),
         new StubEntity({ name: "c", price: 5 }),
       ];
 
-      let itemsSorted = await repository["applySort"](
+      let itemsSorted = repository["applySort"](
         items,
         "name",
-        SortDirection.ASC
+        SortDirection.ASC,
       );
       expect(itemsSorted).toStrictEqual([items[1], items[0], items[2]]);
 
-      itemsSorted = await repository["applySort"](
-        items,
-        "name",
-        SortDirection.DESC
-      );
+      itemsSorted = repository["applySort"](items, "name", SortDirection.DESC);
       expect(itemsSorted).toStrictEqual([items[2], items[0], items[1]]);
     });
   });
 
   describe("applyPaginate method", () => {
-    it("should paginate items", async () => {
+    it("should paginate items", () => {
       const items = [
         new StubEntity({ name: "a", price: 5 }),
         new StubEntity({ name: "b", price: 5 }),
@@ -148,16 +141,16 @@ describe("InMemorySearchableRepository Unit Tests", () => {
         new StubEntity({ name: "e", price: 5 }),
       ];
 
-      let itemsPaginated = await repository["applyPagination"](items, 1, 2);
+      let itemsPaginated = repository["applyPagination"](items, 1, 2);
       expect(itemsPaginated).toStrictEqual([items[0], items[1]]);
 
-      itemsPaginated = await repository["applyPagination"](items, 2, 2);
+      itemsPaginated = repository["applyPagination"](items, 2, 2);
       expect(itemsPaginated).toStrictEqual([items[2], items[3]]);
 
-      itemsPaginated = await repository["applyPagination"](items, 3, 2);
+      itemsPaginated = repository["applyPagination"](items, 3, 2);
       expect(itemsPaginated).toStrictEqual([items[4]]);
 
-      itemsPaginated = await repository["applyPagination"](items, 4, 2);
+      itemsPaginated = repository["applyPagination"](items, 4, 2);
       expect(itemsPaginated).toStrictEqual([]);
     });
   });
@@ -165,7 +158,7 @@ describe("InMemorySearchableRepository Unit Tests", () => {
   describe("search method", () => {
     it("should apply only paginate when other params are null", async () => {
       const entity = new StubEntity({ name: "a", price: 5 });
-      const items = Array(16).fill(entity);
+      const items = Array(16).fill(entity) as StubEntity[];
       repository.items = items;
 
       const result = await repository.search(new SearchParams());
@@ -175,7 +168,7 @@ describe("InMemorySearchableRepository Unit Tests", () => {
           total: 16,
           current_page: 1,
           per_page: 15,
-        })
+        }),
       );
     });
 
@@ -189,7 +182,7 @@ describe("InMemorySearchableRepository Unit Tests", () => {
       repository.items = items;
 
       let result = await repository.search(
-        new SearchParams({ page: 1, per_page: 2, searchTerm: "TEST" })
+        new SearchParams({ page: 1, per_page: 2, searchTerm: "TEST" }),
       );
       expect(result).toStrictEqual(
         new SearchResult({
@@ -197,11 +190,11 @@ describe("InMemorySearchableRepository Unit Tests", () => {
           total: 3,
           current_page: 1,
           per_page: 2,
-        })
+        }),
       );
 
       result = await repository.search(
-        new SearchParams({ page: 2, per_page: 2, searchTerm: "TEST" })
+        new SearchParams({ page: 2, per_page: 2, searchTerm: "TEST" }),
       );
       expect(result).toStrictEqual(
         new SearchResult({
@@ -209,7 +202,7 @@ describe("InMemorySearchableRepository Unit Tests", () => {
           total: 3,
           current_page: 2,
           per_page: 2,
-        })
+        }),
       );
     });
 
@@ -288,7 +281,7 @@ describe("InMemorySearchableRepository Unit Tests", () => {
         async ({ search_params, search_result }) => {
           const result = await repository.search(search_params);
           expect(result).toStrictEqual(search_result);
-        }
+        },
       );
     });
 

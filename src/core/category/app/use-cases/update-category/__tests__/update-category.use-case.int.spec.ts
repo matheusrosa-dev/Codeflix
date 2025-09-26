@@ -20,13 +20,13 @@ describe("UpdateCategoryUseCase Integration Tests", () => {
   it("should throws error when entity not found", async () => {
     const uuid = new Uuid();
     await expect(() =>
-      useCase.execute({ id: uuid.id, name: "fake" })
+      useCase.execute({ id: uuid.id, name: "fake" }),
     ).rejects.toThrow(new NotFoundError(uuid.id, Category));
   });
 
   it("should update a category", async () => {
     const entity = Category.fake().oneCategory().build();
-    repository.insert(entity);
+    await repository.insert(entity);
 
     let output = await useCase.execute({
       id: entity.category_id.id,

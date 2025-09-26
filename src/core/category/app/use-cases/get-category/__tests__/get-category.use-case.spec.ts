@@ -18,12 +18,12 @@ describe("GetCategoryUseCase Unit Tests", () => {
 
   it("should throws error when entity not found", async () => {
     await expect(() => useCase.execute({ id: "fake id" })).rejects.toThrow(
-      new InvalidUuidError()
+      new InvalidUuidError(),
     );
 
     const uuid = new Uuid();
     await expect(() => useCase.execute({ id: uuid.id })).rejects.toThrow(
-      new NotFoundError(uuid.id, Category)
+      new NotFoundError(uuid.id, Category),
     );
   });
 

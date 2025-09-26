@@ -20,7 +20,7 @@ export interface ISearchableRepository<
   EntityId extends ValueObject,
   SearchTerm = string,
   SearchInput = SearchParams<SearchTerm>,
-  SearchOutput = SearchResult<E>
+  SearchOutput = SearchResult<E>,
 > extends IRepository<E, EntityId> {
   sortableFields: string[];
 

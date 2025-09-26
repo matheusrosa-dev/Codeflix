@@ -7,7 +7,10 @@ class StringValueObject extends ValueObject {
 }
 
 class ComplexValueObject extends ValueObject {
-  constructor(public value1: string, public value2: number) {
+  constructor(
+    public value1: string,
+    public value2: number,
+  ) {
     super();
   }
 }

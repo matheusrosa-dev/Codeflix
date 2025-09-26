@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { SearchResult } from "../search-result";
 
 describe("SearchResult Unit Tests", () => {

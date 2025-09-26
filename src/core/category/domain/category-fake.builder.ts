@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Chance } from "chance";
 import { Category } from "./category.entity";
 import { Uuid } from "../../shared/domain/value-objects/uuid.vo";
@@ -72,8 +76,11 @@ export class CategoryFakeBuilder<TBuild = any> {
           category_id: !this._category_id
             ? undefined
             : this.callFactory(this._category_id, index),
+
           name: this.callFactory(this._name, index),
+
           description: this.callFactory(this._description, index),
+
           is_active: this.callFactory(this._is_active, index),
           ...(this._created_at && {
             created_at: this.callFactory(this._created_at, index),
@@ -89,23 +96,23 @@ export class CategoryFakeBuilder<TBuild = any> {
   }
 
   get category_id() {
-    return this.getValue("category_id");
+    return this.getValue("category_id") as Uuid;
   }
 
   get name() {
-    return this.getValue("name");
+    return this.getValue("name") as string;
   }
 
   get description() {
-    return this.getValue("description");
+    return this.getValue("description") as string;
   }
 
   get is_active() {
-    return this.getValue("is_active");
+    return this.getValue("is_active") as boolean;
   }
 
   get created_at() {
-    return this.getValue("created_at");
+    return this.getValue("created_at") as Date;
   }
 
   private getValue(prop: string) {
@@ -114,7 +121,7 @@ export class CategoryFakeBuilder<TBuild = any> {
 
     if (!this[privateProp] && optional.includes(prop)) {
       throw new Error(
-        `Property ${prop} not have a factory, use 'with' methods`
+        `Property ${prop} not have a factory, use 'with' methods`,
       );
     }
     return this.callFactory(this[privateProp], 0);

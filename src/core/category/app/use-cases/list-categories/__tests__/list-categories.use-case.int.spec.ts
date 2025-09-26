@@ -26,7 +26,9 @@ describe("ListCategoriesUseCase Integration Tests", () => {
     await repository.bulkInsert(categories);
     const output = await useCase.execute({});
     expect(output).toEqual({
-      items: [...categories].reverse().map(CategoryOutputMapper.toOutput),
+      items: [...categories]
+        .reverse()
+        .map((item) => CategoryOutputMapper.toOutput(item)),
       total: 2,
       current_page: 1,
       per_page: 15,
@@ -59,7 +61,9 @@ describe("ListCategoriesUseCase Integration Tests", () => {
       searchTerm: "a",
     });
     expect(output).toEqual({
-      items: [categories[1], categories[2]].map(CategoryOutputMapper.toOutput),
+      items: [categories[1], categories[2]].map((item) =>
+        CategoryOutputMapper.toOutput(item),
+      ),
       total: 3,
       current_page: 1,
       per_page: 2,
@@ -73,7 +77,7 @@ describe("ListCategoriesUseCase Integration Tests", () => {
       searchTerm: "a",
     });
     expect(output).toEqual({
-      items: [categories[0]].map(CategoryOutputMapper.toOutput),
+      items: [categories[0]].map((item) => CategoryOutputMapper.toOutput(item)),
       total: 3,
       current_page: 2,
       per_page: 2,
@@ -88,7 +92,9 @@ describe("ListCategoriesUseCase Integration Tests", () => {
       searchTerm: "a",
     });
     expect(output).toEqual({
-      items: [categories[0], categories[2]].map(CategoryOutputMapper.toOutput),
+      items: [categories[0], categories[2]].map((item) =>
+        CategoryOutputMapper.toOutput(item),
+      ),
       total: 3,
       current_page: 1,
       per_page: 2,

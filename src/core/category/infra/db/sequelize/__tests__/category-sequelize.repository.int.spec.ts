@@ -18,14 +18,14 @@ describe("CategorySequelizeRepository Integration Test", () => {
     models: [CategoryModel],
   });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     repository = new CategorySequelizeRepository(CategoryModel);
   });
 
   it("should inserts a new entity", async () => {
-    let category = Category.fake().oneCategory().build();
+    const category = Category.fake().oneCategory().build();
     await repository.insert(category);
-    let entity = await repository.findById(category.category_id);
+    const entity = await repository.findById(category.category_id);
     expect(entity.toJSON()).toStrictEqual(category.toJSON());
   });
 
@@ -50,7 +50,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
   it("should throw error on update when a entity not found", async () => {
     const entity = Category.fake().oneCategory().build();
     await expect(repository.update(entity)).rejects.toThrow(
-      new NotFoundError(entity.category_id.id, Category)
+      new NotFoundError(entity.category_id.id, Category),
     );
   });
 
@@ -68,7 +68,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
   it("should throw error on delete when a entity not found", async () => {
     const categoryId = new Uuid();
     await expect(repository.delete(categoryId)).rejects.toThrow(
-      new NotFoundError(categoryId.id, Category)
+      new NotFoundError(categoryId.id, Category),
     );
   });
 
@@ -112,7 +112,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
           description: null,
           is_active: true,
           created_at: created_at,
-        })
+        }),
       );
     });
 
@@ -162,7 +162,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
           page: 1,
           per_page: 2,
           searchTerm: "TEST",
-        })
+        }),
       );
       expect(searchOutput.toJSON(true)).toMatchObject(
         new CategorySearchResult({
@@ -170,7 +170,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
           total: 3,
           current_page: 1,
           per_page: 2,
-        }).toJSON(true)
+        }).toJSON(true),
       );
 
       searchOutput = await repository.search(
@@ -178,7 +178,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
           page: 2,
           per_page: 2,
           searchTerm: "TEST",
-        })
+        }),
       );
       expect(searchOutput.toJSON(true)).toMatchObject(
         new CategorySearchResult({
@@ -186,7 +186,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
           total: 3,
           current_page: 2,
           per_page: 2,
-        }).toJSON(true)
+        }).toJSON(true),
       );
     });
 
@@ -314,7 +314,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
         async ({ search_params, search_result }) => {
           const result = await repository.search(search_params);
           expect(result.toJSON(true)).toMatchObject(search_result.toJSON(true));
-        }
+        },
       );
     });
   });

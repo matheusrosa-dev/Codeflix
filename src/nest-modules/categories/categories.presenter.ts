@@ -1,5 +1,5 @@
 import { CategoryOutput } from "@core/category/app/use-cases/common/category-output";
-import { ListCategoriesOutput } from "@core/category/app/use-cases/list-category/list-categories.use-case";
+import { ListCategoriesOutput } from "@core/category/app/use-cases/list-categories/list-categories.use-case";
 import { Transform } from "class-transformer";
 import { CollectionPresenter } from "../shared/collection.presenter";
 

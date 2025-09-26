@@ -40,7 +40,7 @@ describe("ListCategoriesUseCase Unit Tests", () => {
 
     output = useCase["toOutput"](result);
     expect(output).toStrictEqual({
-      items: [entity].map(CategoryOutputMapper.toOutput),
+      items: [entity].map((item) => CategoryOutputMapper.toOutput(item)),
       total: 1,
       current_page: 1,
       per_page: 2,
@@ -60,7 +60,9 @@ describe("ListCategoriesUseCase Unit Tests", () => {
 
     const output = await useCase.execute({});
     expect(output).toStrictEqual({
-      items: [...items].reverse().map(CategoryOutputMapper.toOutput),
+      items: [...items]
+        .reverse()
+        .map((item) => CategoryOutputMapper.toOutput(item)),
       total: 2,
       current_page: 1,
       per_page: 15,
@@ -93,7 +95,9 @@ describe("ListCategoriesUseCase Unit Tests", () => {
       searchTerm: "a",
     });
     expect(output).toStrictEqual({
-      items: [items[1], items[2]].map(CategoryOutputMapper.toOutput),
+      items: [items[1], items[2]].map((item) =>
+        CategoryOutputMapper.toOutput(item),
+      ),
       total: 3,
       current_page: 1,
       per_page: 2,
@@ -107,7 +111,7 @@ describe("ListCategoriesUseCase Unit Tests", () => {
       searchTerm: "a",
     });
     expect(output).toStrictEqual({
-      items: [items[0]].map(CategoryOutputMapper.toOutput),
+      items: [items[0]].map((item) => CategoryOutputMapper.toOutput(item)),
       total: 3,
       current_page: 2,
       per_page: 2,
@@ -122,7 +126,9 @@ describe("ListCategoriesUseCase Unit Tests", () => {
       searchTerm: "a",
     });
     expect(output).toStrictEqual({
-      items: [items[0], items[2]].map(CategoryOutputMapper.toOutput),
+      items: [items[0], items[2]].map((item) =>
+        CategoryOutputMapper.toOutput(item),
+      ),
       total: 3,
       current_page: 1,
       per_page: 2,

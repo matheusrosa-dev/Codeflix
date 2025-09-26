@@ -1,4 +1,5 @@
-import { SearchParams, SortDirection } from "../search-params";
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { SearchParams } from "../search-params";
 
 describe("SearchParams Unit Tests", () => {
   test("page prop", () => {
@@ -50,7 +51,7 @@ describe("SearchParams Unit Tests", () => {
 
     arrange.forEach((i) => {
       expect(new SearchParams({ per_page: i.per_page as any }).per_page).toBe(
-        i.expected
+        i.expected,
       );
     });
   });
@@ -107,7 +108,7 @@ describe("SearchParams Unit Tests", () => {
     arrange.forEach((i) => {
       expect(
         new SearchParams({ sort: "field", sort_dir: i.sort_dir as any })
-          .sort_dir
+          .sort_dir,
       ).toBe(i.expected);
     });
   });
@@ -133,7 +134,7 @@ describe("SearchParams Unit Tests", () => {
 
     arrange.forEach((i) => {
       expect(
-        new SearchParams({ searchTerm: i.searchTerm as any }).searchTerm
+        new SearchParams({ searchTerm: i.searchTerm as any }).searchTerm,
       ).toBe(i.expected);
     });
   });

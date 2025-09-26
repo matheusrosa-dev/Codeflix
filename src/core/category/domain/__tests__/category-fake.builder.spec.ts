@@ -8,7 +8,9 @@ describe("CategoryFakerBuilder Unit Tests", () => {
 
     test("should throw error when any with methods has called", () => {
       expect(() => faker.category_id).toThrow(
-        new Error("Property category_id not have a factory, use 'with' methods")
+        new Error(
+          "Property category_id not have a factory, use 'with' methods",
+        ),
       );
     });
 
@@ -167,7 +169,7 @@ describe("CategoryFakerBuilder Unit Tests", () => {
     test("should throw error when any with methods has called", () => {
       const fakerCategory = CategoryFakeBuilder.oneCategory();
       expect(() => fakerCategory.created_at).toThrow(
-        new Error("Property created_at not have a factory, use 'with' methods")
+        new Error("Property created_at not have a factory, use 'with' methods"),
       );
     });
 

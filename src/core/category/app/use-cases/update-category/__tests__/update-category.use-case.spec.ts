@@ -18,13 +18,13 @@ describe("UpdateCategoryUseCase Unit Tests", () => {
 
   it("should throws error when entity not found", async () => {
     await expect(() =>
-      useCase.execute({ id: "fake id", name: "fake" })
+      useCase.execute({ id: "fake id", name: "fake" }),
     ).rejects.toThrow(new InvalidUuidError());
 
     const uuid = new Uuid();
 
     await expect(() =>
-      useCase.execute({ id: uuid.id, name: "fake" })
+      useCase.execute({ id: uuid.id, name: "fake" }),
     ).rejects.toThrow(new NotFoundError(uuid.id, Category));
   });
 
@@ -35,7 +35,7 @@ describe("UpdateCategoryUseCase Unit Tests", () => {
       useCase.execute({
         id: aggregate.category_id.id,
         name: "t".repeat(256),
-      })
+      }),
     ).rejects.toThrow("Entity Validation Error");
   });
 

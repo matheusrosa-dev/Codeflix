@@ -15,13 +15,19 @@ export class CategoryInMemoryRepository
 
   protected async applySearchTerm(
     items: Category[],
-    searchTerm: CategorySearchTerm
+    searchTerm: CategorySearchTerm,
   ): Promise<Category[]> {
     if (!searchTerm) return items;
 
-    return items.filter((i) => {
-      return i.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const foundItems: Category[] = await new Promise((resolve) => {
+      const filtered = items.filter((i) => {
+        return i.name.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+
+      resolve(filtered);
     });
+
+    return foundItems;
   }
 
   getEntity() {
@@ -31,7 +37,7 @@ export class CategoryInMemoryRepository
   protected applySort(
     items: Category[],
     sort: string,
-    sort_dir: SortDirection
+    sort_dir: SortDirection,
   ): Category[] {
     if (sort) {
       return super.applySort(items, sort, sort_dir);

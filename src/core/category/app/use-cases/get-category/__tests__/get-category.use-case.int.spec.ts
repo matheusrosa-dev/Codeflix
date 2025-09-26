@@ -20,7 +20,7 @@ describe("GetCategoryUseCase Integration Tests", () => {
   it("should throws error when entity not found", async () => {
     const uuid = new Uuid();
     await expect(() => useCase.execute({ id: uuid.id })).rejects.toThrow(
-      new NotFoundError(uuid.id, Category)
+      new NotFoundError(uuid.id, Category),
     );
   });
 

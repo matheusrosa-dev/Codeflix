@@ -107,6 +107,7 @@ describe("Category Without Validator Unit Tests", () => {
     const arrange = [{ id: null }, { id: undefined }, { id: new Uuid() }];
 
     test.each(arrange)("should be is %j", (props) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const category = new Category(props as any);
       expect(category.category_id).toBeInstanceOf(Uuid);
     });

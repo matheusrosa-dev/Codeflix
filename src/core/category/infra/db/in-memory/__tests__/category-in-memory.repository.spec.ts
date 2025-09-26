@@ -28,7 +28,7 @@ describe("CategoryInMemoryRepository", () => {
     expect(itemsFiltered).toStrictEqual([items[0], items[1]]);
   });
 
-  it("should sort by created_at when sort param is null", async () => {
+  it("should sort by created_at when sort param is null", () => {
     const created_at = new Date();
 
     const items = [
@@ -49,29 +49,21 @@ describe("CategoryInMemoryRepository", () => {
         .build(),
     ];
 
-    const itemsSorted = await repository["applySort"](items, null, null);
+    const itemsSorted = repository["applySort"](items, null, null);
     expect(itemsSorted).toStrictEqual([items[2], items[1], items[0]]);
   });
 
-  it("should sort by name", async () => {
+  it("should sort by name", () => {
     const items = [
       Category.fake().oneCategory().withName("c").build(),
       Category.fake().oneCategory().withName("b").build(),
       Category.fake().oneCategory().withName("a").build(),
     ];
 
-    let itemsSorted = await repository["applySort"](
-      items,
-      "name",
-      SortDirection.ASC
-    );
+    let itemsSorted = repository["applySort"](items, "name", SortDirection.ASC);
     expect(itemsSorted).toStrictEqual([items[2], items[1], items[0]]);
 
-    itemsSorted = await repository["applySort"](
-      items,
-      "name",
-      SortDirection.DESC
-    );
+    itemsSorted = repository["applySort"](items, "name", SortDirection.DESC);
     expect(itemsSorted).toStrictEqual([items[0], items[1], items[2]]);
   });
 });

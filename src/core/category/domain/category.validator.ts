@@ -17,6 +17,7 @@ export class CategoryValidator extends ClassValidatorFields {
     const fieldsToValidate = fields?.length ? fields : ["name"];
     return super.validate(
       notification,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       new CategoryRules(data),
       fieldsToValidate,
     );
