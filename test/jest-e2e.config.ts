@@ -10,6 +10,7 @@ const config: Config = {
   transform: {
     "^.+\\.(t|j)s$": "@swc/jest",
   },
+  setupFilesAfterEnv: ["./jest-setup.ts"],
 };
 
 export default config;
