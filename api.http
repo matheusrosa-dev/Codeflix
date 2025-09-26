@@ -1,6 +1,8 @@
+
 ### Create category
 POST http://localhost:3333/categories
 Content-Type: application/json
+    # "name": "Categoria 1",
 
 {
     "name": "Categoria 1",
@@ -10,3 +12,8 @@ Content-Type: application/json
 
 ### Lista categorias
 GET http://localhost:3333/categories
+
+
+###
+GET http://localhost:3333/categories/f47ac10b-58cc-4372-a567-0e02b2c3d479
+
