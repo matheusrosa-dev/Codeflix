@@ -16,9 +16,9 @@ export type SearchParamsConstructorProps<SearchTerm = string> = {
 export class SearchParams<SearchTerm = string> extends ValueObject {
   protected _page: number;
   protected _per_page: number = 15;
-  protected _sort: string | null;
+  protected _sort: string;
   protected _sort_dir: SortDirection;
-  protected _searchTerm: SearchTerm | null;
+  protected _searchTerm: SearchTerm;
 
   constructor(props = {} as SearchParamsConstructorProps<SearchTerm>) {
     super();
@@ -34,14 +34,13 @@ export class SearchParams<SearchTerm = string> extends ValueObject {
   }
 
   private set page(value: number) {
-    const isValid = this.validatePage(value);
+    let _page = +value;
 
-    if (!isValid) {
-      this._page = 1;
-      return;
+    if (Number.isNaN(_page) || _page <= 0 || parseInt(_page as any) !== _page) {
+      _page = 1;
     }
 
-    this._page = parseInt(value as any);
+    this._page = _page;
   }
 
   get per_page() {
@@ -49,42 +48,42 @@ export class SearchParams<SearchTerm = string> extends ValueObject {
   }
 
   private set per_page(value: number) {
-    const isValid = this.validatePage(value);
+    let _per_page = value === (true as any) ? this._per_page : +value;
 
-    if (!isValid) return;
+    if (
+      Number.isNaN(_per_page) ||
+      _per_page <= 0 ||
+      parseInt(_per_page as any) !== _per_page
+    ) {
+      _per_page = this._per_page;
+    }
 
-    this._per_page = value;
+    this._per_page = _per_page;
   }
 
   get sort() {
     return this._sort;
   }
 
-  private set sort(value: string) {
-    if (value === null || value === undefined || value === "") {
-      this._sort = null;
-      return;
-    }
-
-    this._sort = `${value}`;
+  private set sort(value: string | null) {
+    this._sort =
+      value === null || value === undefined || value === "" ? null : `${value}`;
   }
 
   get sort_dir() {
     return this._sort_dir;
   }
 
-  private set sort_dir(value: SortDirection) {
+  private set sort_dir(value: SortDirection | null) {
     if (!this.sort) {
       this._sort_dir = null;
       return;
     }
-
-    if (!Object.values(SortDirection).includes(value)) {
-      this._sort_dir = SortDirection.ASC;
-      return;
-    }
-
-    this._sort_dir = value;
+    const dir = `${value}`.toLowerCase() as SortDirection;
+    this._sort_dir =
+      dir !== SortDirection.ASC && dir !== SortDirection.DESC
+        ? SortDirection.ASC
+        : dir;
   }
 
   get searchTerm(): SearchTerm {
@@ -92,17 +91,9 @@ export class SearchParams<SearchTerm = string> extends ValueObject {
   }
 
   protected set searchTerm(value: SearchTerm) {
-    if (value === null || value === undefined || value === "") {
-      this._searchTerm = null;
-      return;
-    }
-
-    this._searchTerm = `${value}` as SearchTerm;
-  }
-
-  private validatePage(page: number) {
-    const isValid = !Number.isNaN(page) && page > 0 && Number.isInteger(page);
-
-    return isValid;
+    this._searchTerm =
+      value === null || value === undefined || (value as unknown) === ""
+        ? null
+        : (`${value}` as any);
   }
 }
