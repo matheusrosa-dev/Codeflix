@@ -17,12 +17,20 @@ const config: Config = {
   // coverageDirectory: undefined,
 
   // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    ".interface.ts",
+    "-interface.ts",
+    "shared/testing",
+    "shared-module/testing",
+    "validator-rules.ts",
+    "-fixture.ts",
+    ".input.ts",
+    ".d.ts",
+  ],
 
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: false,
+  collectCoverage: true,
 
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ["text"],
