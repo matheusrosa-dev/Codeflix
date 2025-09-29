@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
-import { Category } from "../../../../domain/category.entity";
+import { Category } from "../../../../domain/category.aggregate";
 import { Uuid } from "../../../../../shared/domain/value-objects/uuid.vo";
 import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
 import { CategorySequelizeRepository } from "../../sequelize/category-sequelize.repository";

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Chance } from "chance";
-import { Category } from "./category.entity";
-import { Uuid } from "../../shared/domain/value-objects/uuid.vo";
+import { Category, CategoryId } from "./category.aggregate";
 
 type PropOrFactory<T> = T | ((index: number) => T);
 
 export class CategoryFakeBuilder<TBuild = any> {
-  private _category_id?: PropOrFactory<Uuid>;
+  private _category_id?: PropOrFactory<CategoryId>;
   private _name: PropOrFactory<string> = (_index) => this.chance.word();
   private _description: PropOrFactory<string> = (_index) =>
     this.chance.paragraph();
@@ -30,7 +29,7 @@ export class CategoryFakeBuilder<TBuild = any> {
     this.chance = Chance();
   }
 
-  withUuid(valueOrFactory: PropOrFactory<Uuid>) {
+  withCategoryId(valueOrFactory: PropOrFactory<CategoryId>) {
     this._category_id = valueOrFactory;
     return this;
   }
@@ -93,7 +92,7 @@ export class CategoryFakeBuilder<TBuild = any> {
   }
 
   get category_id() {
-    return this.getValue("category_id") as Uuid;
+    return this.getValue("category_id") as CategoryId;
   }
 
   get name() {
