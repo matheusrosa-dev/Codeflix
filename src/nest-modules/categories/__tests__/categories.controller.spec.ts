@@ -133,7 +133,7 @@ describe("CategoriesController Unit Tests", () => {
       per_page: 2,
       sort: "name",
       sort_dir: "desc" as SortDirection,
-      filter: "test",
+      searchTerm: "test",
     };
     const presenter = await controller.search(searchParams);
     expect(presenter).toBeInstanceOf(CategoryCollectionPresenter);
