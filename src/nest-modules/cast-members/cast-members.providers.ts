@@ -5,11 +5,9 @@ import { UpdateCastMemberUseCase } from "@core/cast-member/app/use-cases/update-
 import { ListCastMembersUseCase } from "@core/cast-member/app/use-cases/list-cast-members/list-cast-members.use-case";
 import { GetCastMemberUseCase } from "@core/cast-member/app/use-cases/get-cast-member/get-cast-member.use-case";
 import { DeleteCastMemberUseCase } from "@core/cast-member/app/use-cases/delete-cast-member/delete-cast-member.use-case";
-import {
-  CastMemberModel,
-  CastMemberSequelizeRepository,
-} from "@core/cast-member/infra/db/sequelize/cast-member-sequelize";
+import { CastMemberSequelizeRepository } from "@core/cast-member/infra/db/sequelize/cast-member-sequelize.repository";
 import { ICastMemberRepository } from "@core/cast-member/domain/cast-member.repository";
+import { CastMemberModel } from "@core/cast-member/infra/db/sequelize/cast-member.model";
 
 export const REPOSITORIES = {
   CAST_MEMBER_REPOSITORY: {

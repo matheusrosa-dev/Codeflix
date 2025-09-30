@@ -1,29 +1,19 @@
-import {
-  Column,
-  DataType,
-  PrimaryKey,
-  Table,
-  Model,
-} from "sequelize-typescript";
-
 import { literal, Op } from "sequelize";
 import {
   CastMember,
   CastMemberId,
 } from "../../../domain/cast-member.aggregate";
 import { SortDirection } from "../../../../shared/domain/repository/search-params";
-import { LoadEntityError } from "../../../../shared/domain/validators/validation.error";
 import { NotFoundError } from "../../../../shared/domain/errors/not-found.error";
 import {
   ICastMemberRepository,
   CastMemberSearchParams,
   CastMemberSearchResult,
 } from "../../../domain/cast-member.repository";
-import {
-  CastMemberType,
-  CastMemberTypes,
-} from "../../../domain/cast-member-type.vo";
+import { CastMemberTypes } from "../../../domain/cast-member-type.vo";
 import { InvalidArgumentError } from "../../../../shared/domain/errors/invalid-argument.error";
+import { CastMemberModelMapper } from "./cast-member-model-mapper";
+import { CastMemberModel } from "./cast-member.model";
 
 export type CastMemberModelProps = {
   cast_member_id: string;
@@ -31,25 +21,6 @@ export type CastMemberModelProps = {
   type: CastMemberTypes;
   created_at: Date;
 };
-
-@Table({ tableName: "cast_members", timestamps: false })
-export class CastMemberModel extends Model<CastMemberModelProps> {
-  @PrimaryKey
-  @Column({ type: DataType.UUID })
-  declare cast_member_id: string;
-
-  @Column({ allowNull: false, type: DataType.STRING(255) })
-  declare name: string;
-
-  @Column({
-    allowNull: false,
-    type: DataType.ENUM(...Object.values(CastMemberTypes)),
-  })
-  declare type: CastMemberTypes;
-
-  @Column({ allowNull: false, type: DataType.DATE(3) })
-  declare created_at: Date;
-}
 
 export class CastMemberSequelizeRepository implements ICastMemberRepository {
   sortableFields: string[] = ["name", "created_at"];
@@ -189,33 +160,5 @@ export class CastMemberSequelizeRepository implements ICastMemberRepository {
 
   getEntity(): new (...args: any[]) => CastMember {
     return CastMember;
-  }
-}
-
-export class CastMemberModelMapper {
-  static toEntity(model: CastMemberModel) {
-    const { cast_member_id: id, ...otherData } = model.toJSON();
-    const [type, errorCastMemberType] = CastMemberType.create(
-      otherData.type as any,
-    ).asArray();
-
-    const castMember = new CastMember({
-      ...otherData,
-      cast_member_id: new CastMemberId(id),
-      type,
-    });
-
-    castMember.validate();
-
-    const notification = castMember.notification;
-    if (errorCastMemberType) {
-      notification.setError(errorCastMemberType.message, "type");
-    }
-
-    if (notification.hasErrors()) {
-      throw new LoadEntityError(notification.toJSON());
-    }
-
-    return castMember;
   }
 }

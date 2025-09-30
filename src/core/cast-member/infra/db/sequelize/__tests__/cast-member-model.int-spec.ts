@@ -1,9 +1,7 @@
 import { DataType } from "sequelize-typescript";
-import * as CastMemberSequelize from "../cast-member-sequelize";
 import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
 import { CastMemberTypes } from "../../../../domain/cast-member-type.vo";
-
-const { CastMemberModel } = CastMemberSequelize;
+import { CastMemberModel } from "../cast-member.model";
 
 describe("CastMemberModel Integration Tests", () => {
   setupSequelize({ models: [CastMemberModel] });

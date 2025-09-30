@@ -8,9 +8,8 @@ import {
   CastMember,
   CastMemberId,
 } from "../../../../domain/cast-member.aggregate";
-import * as CastMemberSequelize from "../cast-member-sequelize";
-
-const { CastMemberModel, CastMemberModelMapper } = CastMemberSequelize;
+import { CastMemberModelMapper } from "../cast-member-model-mapper";
+import { CastMemberModel } from "../cast-member.model";
 
 describe("CastMemberModelMapper Integration Tests", () => {
   setupSequelize({ models: [CastMemberModel] });

@@ -5,10 +5,8 @@ import {
   CastMemberId,
 } from "../../../../domain/cast-member.aggregate";
 import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
-import {
-  CastMemberModel,
-  CastMemberSequelizeRepository,
-} from "../../../../infra/db/sequelize/cast-member-sequelize";
+import { CastMemberSequelizeRepository } from "../../../../infra/db/sequelize/cast-member-sequelize.repository";
+import { CastMemberModel } from "@core/cast-member/infra/db/sequelize/cast-member.model";
 
 describe("GetCastMemberUseCase Integration Tests", () => {
   let useCase: GetCastMemberUseCase;

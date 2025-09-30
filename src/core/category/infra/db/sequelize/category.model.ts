@@ -6,7 +6,7 @@ import {
   Table,
 } from "sequelize-typescript";
 
-export type CategoryModelProps = {
+type CategoryModelProps = {
   category_id: string;
   name: string;
   description: string;
