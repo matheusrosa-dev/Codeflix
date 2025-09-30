@@ -225,7 +225,6 @@ describe("ConfigModule Unit Tests", () => {
       }).compile();
       fail("ConfigModule should throw an error when env vars are invalid");
     } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(e.message).toContain('"DB_VENDOR" must be one of [mysql, sqlite]');
     }
   });

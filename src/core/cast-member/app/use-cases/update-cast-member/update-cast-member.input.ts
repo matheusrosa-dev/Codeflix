@@ -1,10 +1,4 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  validateSync,
-} from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { CastMemberTypes } from "../../../domain/cast-member-type.vo";
 
 export type UpdateCastMemberInputConstructorProps = {
@@ -22,7 +16,7 @@ export class UpdateCastMemberInput {
   @IsOptional()
   name: string;
 
-  @IsInt()
+  @IsEnum(CastMemberTypes)
   @IsOptional()
   type: CastMemberTypes;
 
@@ -37,11 +31,5 @@ export class UpdateCastMemberInput {
     if (props.type) {
       this.type = props.type;
     }
-  }
-}
-
-export class ValidateUpdateCastMemberInput {
-  static validate(input: UpdateCastMemberInput) {
-    return validateSync(input);
   }
 }

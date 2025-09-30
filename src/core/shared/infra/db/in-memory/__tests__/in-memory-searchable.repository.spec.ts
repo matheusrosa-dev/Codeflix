@@ -43,7 +43,6 @@ class StubInMemorySearchableRepository extends InMemorySearchableRepository<
     return StubEntity;
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   protected async applySearchTerm(
     items: StubEntity[],
     searchTerm: string | null,

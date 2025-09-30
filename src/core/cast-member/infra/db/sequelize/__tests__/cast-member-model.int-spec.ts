@@ -5,8 +5,6 @@ import { CastMemberTypes } from "../../../../domain/cast-member-type.vo";
 
 const { CastMemberModel } = CastMemberSequelize;
 
-// cast-member-model.int-spec.ts
-
 describe("CastMemberModel Integration Tests", () => {
   setupSequelize({ models: [CastMemberModel] });
 

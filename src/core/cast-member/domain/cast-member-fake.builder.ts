@@ -98,19 +98,19 @@ export class CastMemberFakeBuilder<TBuild = any> {
   }
 
   get cast_member_id() {
-    return this.getValue("cast_member_id");
+    return this.getValue("cast_member_id") as CastMemberId;
   }
 
   get name() {
-    return this.getValue("name");
+    return this.getValue("name") as string;
   }
 
   get type() {
-    return this.getValue("type");
+    return this.getValue("type") as CastMemberType;
   }
 
   get created_at() {
-    return this.getValue("created_at");
+    return this.getValue("created_at") as Date;
   }
 
   private getValue(prop: any) {

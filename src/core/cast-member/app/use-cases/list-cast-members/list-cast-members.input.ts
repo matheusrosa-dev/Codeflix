@@ -1,7 +1,7 @@
 import { SearchInput } from "../../../../shared/app/search-input";
 import { SortDirection } from "../../../../shared/domain/repository/search-params";
 import { CastMemberTypes } from "../../../domain/cast-member-type.vo";
-import { IsEnum, ValidateNested, validateSync } from "class-validator";
+import { IsEnum, ValidateNested } from "class-validator";
 
 export class ListCastMembersSearchTerm {
   name?: string | null;
@@ -18,10 +18,4 @@ export class ListCastMembersInput
   sort_dir?: SortDirection;
   @ValidateNested()
   searchTerm?: ListCastMembersSearchTerm;
-}
-
-export class ValidateListCastMembersInput {
-  static validate(input: ListCastMembersInput) {
-    return validateSync(input);
-  }
 }
