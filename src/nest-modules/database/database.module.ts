@@ -3,8 +3,9 @@ import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { CONFIG_SCHEMA_TYPE } from "../config/config.module";
+import { CastMemberModel } from "../../core/cast-member/infra/db/sequelize/cast-member.model";
 
-const models = [CategoryModel];
+const models = [CategoryModel, CastMemberModel];
 
 @Module({
   imports: [

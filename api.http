@@ -1,8 +1,7 @@
 
-### Create category
+### Cria categoria
 POST http://localhost:3333/categories
 Content-Type: application/json
-    # "name": "Categoria 1",
 
 {
     "name": "Categoria 1",
@@ -14,6 +13,23 @@ Content-Type: application/json
 GET http://localhost:3333/categories
 
 
-###
+### Busca categoria pelo id
 GET http://localhost:3333/categories/f47ac10b-58cc-4372-a567-0e02b2c3d479
 
+### ------------------
+
+### Cria membro do elenco
+POST http://localhost:3333/cast-members
+Content-Type: application/json
+
+{
+    "name": "Diretor 1",
+    "type": "Director"
+}
+
+### Lista membros do elenco
+GET http://localhost:3333/cast-members
+
+
+### Busca membro do elenco pelo id
+GET http://localhost:3333/cast-members/3d698a23-703f-4aa9-bf29-482db2747c22
