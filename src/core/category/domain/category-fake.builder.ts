@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Chance } from "chance";
 import { Category, CategoryId } from "./category.aggregate";
 
@@ -6,9 +5,12 @@ type PropOrFactory<T> = T | ((index: number) => T);
 
 export class CategoryFakeBuilder<TBuild = any> {
   private _category_id?: PropOrFactory<CategoryId>;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _name: PropOrFactory<string> = (_index) => this.chance.word();
-  private _description: PropOrFactory<string> = (_index) =>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private _description: PropOrFactory<string | null> = (_index) =>
     this.chance.paragraph();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _is_active: PropOrFactory<boolean> = (_index) => true;
   private _created_at?: PropOrFactory<Date>;
 

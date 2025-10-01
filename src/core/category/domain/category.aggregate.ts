@@ -7,14 +7,14 @@ import { CategoryValidatorFactory } from "./category.validator";
 type CategoryConstructorProps = {
   category_id?: CategoryId;
   name: string;
-  description?: string;
+  description?: string | null;
   is_active?: boolean;
   created_at?: Date;
 };
 
 export type CategoryCreateCommand = {
   name: string;
-  description?: string;
+  description?: string | null;
   is_active?: boolean;
 };
 
@@ -54,7 +54,7 @@ export class Category extends AggregateRoot {
     this.validate(["name"]);
   }
 
-  changeDescription(description: string): void {
+  changeDescription(description: string | null): void {
     this.description = description;
   }
 

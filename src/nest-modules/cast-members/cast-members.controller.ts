@@ -59,7 +59,7 @@ export class CastMembersController {
     const searchTerm =
       searchTermName || searchTermType
         ? { name: searchTermName, type: searchTermType }
-        : null;
+        : undefined;
 
     const output = await this.listUseCase.execute({
       ...searchParams,

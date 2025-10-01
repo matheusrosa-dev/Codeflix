@@ -25,7 +25,7 @@ export class CastMemberInMemoryRepository
 
   protected async applySearchTerm(
     items: CastMember[],
-    searchTerm: CastMemberSearchTerm,
+    searchTerm: CastMemberSearchTerm | null,
   ): Promise<CastMember[]> {
     if (!searchTerm) {
       return items;
