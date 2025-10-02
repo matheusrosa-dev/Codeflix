@@ -30,7 +30,7 @@ const config: Config = {
   ],
 
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: true,
+  collectCoverage: false,
 
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ["text"],
