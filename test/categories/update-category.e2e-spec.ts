@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import request from "supertest";
 import { instanceToPlain } from "class-transformer";
 import { ICategoryRepository } from "../../src/core/category/domain/category.repository";
@@ -98,7 +97,7 @@ describe("CategoriesController (e2e)", () => {
       const arrange = UpdateCategoryFixture.arrangeForUpdate();
       let categoryRepo: ICategoryRepository;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         categoryRepo = appHelper.app.get<ICategoryRepository>(
           CategoryProviders.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );

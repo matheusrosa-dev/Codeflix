@@ -7,12 +7,11 @@ type PropOrFactory<T> = T | ((index: number) => T);
 export class GenreFakeBuilder<TBuild = any> {
   // auto generated in entity
   private _genre_id: PropOrFactory<GenreId> | undefined = undefined;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   private _name: PropOrFactory<string> = (_index) => this.chance.word();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   private _categories_id: PropOrFactory<CategoryId>[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _is_active: PropOrFactory<boolean> = (_index) => true;
   // auto generated in entity
   private _created_at: PropOrFactory<Date> | undefined = undefined;

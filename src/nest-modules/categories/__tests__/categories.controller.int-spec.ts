@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from "@nestjs/testing";
 import { ICategoryRepository } from "@core/category/domain/category.repository";
 import { CategoriesController } from "../categories.controller";

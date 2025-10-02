@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Category, CategoryId } from "../category.aggregate";
 
 describe("Category Without Validator Unit Tests", () => {

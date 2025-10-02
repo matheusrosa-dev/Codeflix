@@ -7,9 +7,7 @@ type PropOrFactory<T> = T | ((index: number) => T);
 export class CastMemberFakeBuilder<TBuild = any> {
   // auto generated in entity
   private _cast_member_id: PropOrFactory<CastMemberId> | undefined = undefined;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _name: PropOrFactory<string> = (_index) => this.chance.word();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _type: PropOrFactory<CastMemberType> = (_index) =>
     CastMemberType.createOneActor();
   // auto generated in entity

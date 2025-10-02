@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { CastMemberType } from "../cast-member-type.vo";
 import { CastMember, CastMemberId } from "../cast-member.aggregate";
 
