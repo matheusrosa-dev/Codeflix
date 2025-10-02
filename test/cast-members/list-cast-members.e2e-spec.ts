@@ -56,7 +56,7 @@ describe("CastMembersController (e2e)", () => {
         await castMemberRepo.bulkInsert(Object.values(entitiesMap));
       });
 
-      test.each([arrange[0]])(
+      test.each([arrange])(
         "when query params is $send_data",
         async ({ send_data, expected }) => {
           const queryParams = qs.stringify(send_data as any);
