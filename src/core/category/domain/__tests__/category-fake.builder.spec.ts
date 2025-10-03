@@ -31,7 +31,6 @@ describe("CategoryFakerBuilder Unit Tests", () => {
       expect(faker.category_id).toBe(category_id);
     });
 
-    //TODO - melhorar este nome
     test("should pass index to category_id factory", () => {
       let mockFactory = jest.fn(() => new CategoryId());
       faker.withCategoryId(mockFactory);

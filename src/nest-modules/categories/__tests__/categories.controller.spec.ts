@@ -19,7 +19,6 @@ describe("CategoriesController Unit Tests", () => {
   });
 
   it("should creates a category", async () => {
-    //Arrange
     const output: CreateCategoryOutput = {
       id: "9366b7dc-2d71-4799-b91c-c64adb205104",
       name: "Movie",
@@ -38,10 +37,8 @@ describe("CategoriesController Unit Tests", () => {
       is_active: true,
     };
 
-    //Act
     const presenter = await controller.create(input);
 
-    //Assert
     expect(mockCreateUseCase.execute).toHaveBeenCalledWith(input);
     expect(presenter).toBeInstanceOf(CategoryPresenter);
     expect(presenter).toStrictEqual(new CategoryPresenter(output));

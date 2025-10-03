@@ -406,7 +406,6 @@ describe("GenreSequelizeRepository Integration Tests", () => {
       ];
       for (const arrangeItem of arrange) {
         const searchOutput = await genreRepo.search(arrangeItem.params);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { items, ...otherOutput } = searchOutput;
         const { items: itemsExpected, ...otherExpected } = arrangeItem.result;
         expect(otherOutput).toMatchObject(otherExpected);
