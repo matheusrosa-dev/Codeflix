@@ -1,10 +1,8 @@
-import {
-  Category,
-  CategoryId,
-} from "../../../../../category/domain/category.aggregate";
+import { Category } from "../../../../../category/domain/category.aggregate";
 import { CategorySequelizeRepository } from "../../../../../category/infra/db/sequelize/category-sequelize.repository";
 import { CategoryModel } from "../../../../../category/infra/db/sequelize/category.model";
 import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
+import { UnitOfWorkSequelize } from "../../../../../shared/infra/db/sequelize/unit-of-work-sequelize";
 import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
 import { Genre, GenreId } from "../../../../domain/genre.aggregate";
 import {
@@ -17,14 +15,16 @@ import { GenreSequelizeRepository } from "../genre-sequelize.repository";
 import { SortDirection } from "@core/shared/domain/repository/search-params";
 
 describe("GenreSequelizeRepository Integration Tests", () => {
-  setupSequelize({
+  const sequelizeHelper = setupSequelize({
     models: [GenreModel, GenreCategoryModel, CategoryModel],
   });
+  let uow: UnitOfWorkSequelize;
   let genreRepo: GenreSequelizeRepository;
   let categoryRepo: CategorySequelizeRepository;
 
   beforeEach(() => {
-    genreRepo = new GenreSequelizeRepository(GenreModel);
+    uow = new UnitOfWorkSequelize(sequelizeHelper.sequelize);
+    genreRepo = new GenreSequelizeRepository(GenreModel, uow);
     categoryRepo = new CategorySequelizeRepository(CategoryModel);
   });
 
@@ -406,6 +406,7 @@ describe("GenreSequelizeRepository Integration Tests", () => {
       ];
       for (const arrangeItem of arrange) {
         const searchOutput = await genreRepo.search(arrangeItem.params);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { items, ...otherOutput } = searchOutput;
         const { items: itemsExpected, ...otherExpected } = arrangeItem.result;
         expect(otherOutput).toMatchObject(otherExpected);
@@ -529,9 +530,9 @@ describe("GenreSequelizeRepository Integration Tests", () => {
 
         expect(result.toJSON(true)).toMatchObject({
           ...expected,
-          items: expected.items.map((i) => ({
+          items: expected.items.map((i: any) => ({
             ...i,
-            categories_id: expect.arrayContaining((i as any).categories_id),
+            categories_id: expect.arrayContaining(i.categories_id),
           })),
         });
       }
@@ -621,9 +622,9 @@ describe("GenreSequelizeRepository Integration Tests", () => {
           const expected = expected_result.toJSON(true);
           expect(result.toJSON(true)).toMatchObject({
             ...expected,
-            items: expected.items.map((i) => ({
+            items: expected.items.map((i: any) => ({
               ...i,
-              categories_id: expect.arrayContaining((i as any).categories_id),
+              categories_id: expect.arrayContaining(i.categories_id),
             })),
           });
         },
@@ -708,9 +709,9 @@ describe("GenreSequelizeRepository Integration Tests", () => {
           const expected = expected_result.toJSON(true);
           expect(result.toJSON(true)).toMatchObject({
             ...expected,
-            items: expected.items.map((i) => ({
+            items: expected.items.map((i: any) => ({
               ...i,
-              categories_id: expect.arrayContaining((i as any).categories_id),
+              categories_id: expect.arrayContaining(i.categories_id),
             })),
           });
         },
@@ -802,13 +803,252 @@ describe("GenreSequelizeRepository Integration Tests", () => {
           const expected = expected_result.toJSON(true);
           expect(result.toJSON(true)).toMatchObject({
             ...expected,
-            items: expected.items.map((i) => ({
+            items: expected.items.map((i: any) => ({
               ...i,
-              categories_id: expect.arrayContaining((i as any).categories_id),
+              categories_id: expect.arrayContaining(i.categories_id),
             })),
           });
         },
       );
+    });
+  });
+
+  describe("transaction mode", () => {
+    describe("insert method", () => {
+      it("should insert a genre", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        await uow.commit();
+
+        const result = await genreRepo.findById(genre.genre_id);
+        expect(genre.genre_id).toBeValueObject(result!.genre_id);
+      });
+
+      it("rollback the insertion", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        await uow.rollback();
+
+        await expect(genreRepo.findById(genre.genre_id)).resolves.toBeNull();
+      });
+    });
+
+    describe("bulkInsert method", () => {
+      it("should insert a list of genres", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake()
+          .manyGenres(2)
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        await uow.commit();
+
+        const [genre1, genre2] = await Promise.all([
+          genreRepo.findById(genres[0].genre_id),
+          genreRepo.findById(genres[1].genre_id),
+        ]);
+        expect(genre1!.genre_id).toBeValueObject(genres[0].genre_id);
+        expect(genre2!.genre_id).toBeValueObject(genres[1].genre_id);
+      });
+
+      it("rollback the bulk insertion", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake()
+          .manyGenres(2)
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        await uow.rollback();
+
+        await expect(
+          genreRepo.findById(genres[0].genre_id),
+        ).resolves.toBeNull();
+        await expect(
+          genreRepo.findById(genres[1].genre_id),
+        ).resolves.toBeNull();
+      });
+    });
+
+    describe("findById method", () => {
+      it("should return a genre", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        const result = await genreRepo.findById(genre.genre_id);
+        expect(result!.genre_id).toBeValueObject(genre.genre_id);
+        await uow.commit();
+      });
+    });
+
+    describe("findAll method", () => {
+      it("should return a list of genres", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake()
+          .manyGenres(2)
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        const result = await genreRepo.findAll();
+        expect(result.length).toBe(2);
+        await uow.commit();
+      });
+    });
+
+    describe("findByIds method", () => {
+      it("should return a list of genres", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake()
+          .manyGenres(2)
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        const result = await genreRepo.findByIds(genres.map((g) => g.genre_id));
+        expect(result.length).toBe(2);
+        await uow.commit();
+      });
+    });
+
+    describe("existsById method", () => {
+      it("should return true if the genre exists", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.insert(genre);
+        const existsResult = await genreRepo.existsById([genre.genre_id]);
+        expect(existsResult.exists[0]).toBeValueObject(genre.genre_id);
+        await uow.commit();
+      });
+    });
+
+    describe("update method", () => {
+      it("should update a genre", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+        await genreRepo.insert(genre);
+
+        await uow.start();
+        genre.changeName("new name");
+        await genreRepo.update(genre);
+        await uow.commit();
+
+        const result = await genreRepo.findById(genre.genre_id);
+        expect(result!.name).toBe(genre.name);
+      });
+
+      it("rollback the update", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+        await genreRepo.insert(genre);
+        await uow.start();
+        genre.changeName("new name");
+        await genreRepo.update(genre);
+        await uow.rollback();
+        const notChangeGenre = await genreRepo.findById(genre.genre_id);
+        expect(notChangeGenre!.name).not.toBe(genre.name);
+      });
+    });
+
+    describe("delete method", () => {
+      it("should delete a genre", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+        await genreRepo.insert(genre);
+
+        await uow.start();
+        await genreRepo.delete(genre.genre_id);
+        await uow.commit();
+
+        await expect(genreRepo.findById(genre.genre_id)).resolves.toBeNull();
+      });
+
+      it("rollback the deletion", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genre = Genre.fake()
+          .oneGenre()
+          .addCategoryId(category.category_id)
+          .build();
+        await genreRepo.insert(genre);
+
+        await uow.start();
+        await genreRepo.delete(genre.genre_id);
+        await uow.rollback();
+
+        const result = await genreRepo.findById(genre.genre_id);
+        expect(result!.genre_id).toBeValueObject(genre.genre_id);
+        expect(result?.categories_id.size).toBe(1);
+      });
+    });
+
+    describe("search method", () => {
+      it("should return a list of genres", async () => {
+        const category = Category.fake().oneCategory().build();
+        await categoryRepo.insert(category);
+        const genres = Genre.fake()
+          .manyGenres(2)
+          .withName("genre")
+          .addCategoryId(category.category_id)
+          .build();
+
+        await uow.start();
+        await genreRepo.bulkInsert(genres);
+        const searchParams = GenreSearchParams.create({
+          searchTerm: { name: "genre" },
+        });
+        const result = await genreRepo.search(searchParams);
+        expect(result.items.length).toBe(2);
+        expect(result.total).toBe(2);
+        await uow.commit();
+      });
     });
   });
 });
