@@ -8,25 +8,25 @@ export enum SortDirection {
 export type SearchParamsConstructorProps<SearchTerm = string> = {
   page?: number;
   per_page?: number;
-  sort?: string;
-  sort_dir?: SortDirection;
-  searchTerm?: SearchTerm;
+  sort?: string | null;
+  sort_dir?: SortDirection | null;
+  searchTerm?: SearchTerm | null;
 };
 
 export class SearchParams<SearchTerm = string> extends ValueObject {
   protected _page: number;
   protected _per_page: number = 15;
-  protected _sort: string;
-  protected _sort_dir: SortDirection;
-  protected _searchTerm: SearchTerm;
+  protected _sort: string | null;
+  protected _sort_dir: SortDirection | null;
+  protected _searchTerm: SearchTerm | null;
 
   constructor(props = {} as SearchParamsConstructorProps<SearchTerm>) {
     super();
-    this.page = props.page;
-    this.per_page = props.per_page;
-    this.sort = props.sort;
-    this.sort_dir = props.sort_dir;
-    this.searchTerm = props.searchTerm;
+    this.page = props.page!;
+    this.per_page = props.per_page!;
+    this.sort = props.sort!;
+    this.sort_dir = props.sort_dir!;
+    this.searchTerm = props.searchTerm!;
   }
 
   get page() {
@@ -86,7 +86,7 @@ export class SearchParams<SearchTerm = string> extends ValueObject {
         : dir;
   }
 
-  get searchTerm(): SearchTerm {
+  get searchTerm(): SearchTerm | null {
     return this._searchTerm;
   }
 

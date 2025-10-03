@@ -15,6 +15,7 @@ export class EntityValidationErrorFilter implements ExceptionFilter {
         ...exception.error.reduce(
           (acc, error) =>
             acc.concat(
+              //@ts-expect-error - error can be string
               typeof error === "string" ? [[error]] : Object.values(error),
             ),
           [],

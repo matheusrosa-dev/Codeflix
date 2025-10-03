@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import request from "supertest";
 import { instanceToPlain } from "class-transformer";
 import { ICategoryRepository } from "../../src/core/category/domain/category.repository";
@@ -98,7 +97,7 @@ describe("CategoriesController (e2e)", () => {
       const arrange = UpdateCategoryFixture.arrangeForUpdate();
       let categoryRepo: ICategoryRepository;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         categoryRepo = appHelper.app.get<ICategoryRepository>(
           CategoryProviders.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
@@ -119,19 +118,19 @@ describe("CategoriesController (e2e)", () => {
           const id = res.body.data.id;
           const categoryUpdated = await categoryRepo.findById(new Uuid(id));
           const presenter = CategoriesController.serialize(
-            CategoryOutputMapper.toOutput(categoryUpdated),
+            CategoryOutputMapper.toOutput(categoryUpdated!),
           );
           const serialized = instanceToPlain(presenter);
           expect(res.body.data).toStrictEqual(serialized);
           expect(res.body.data).toStrictEqual({
             id: serialized.id,
             created_at: serialized.created_at,
-            name: expected.name ?? categoryUpdated.name,
+            name: expected.name ?? categoryUpdated!.name,
             description:
               "description" in expected
                 ? expected.description
-                : categoryUpdated.description,
-            is_active: expected.is_active ?? categoryUpdated.is_active,
+                : categoryUpdated!.description,
+            is_active: expected.is_active ?? categoryUpdated!.is_active,
           });
         },
       );

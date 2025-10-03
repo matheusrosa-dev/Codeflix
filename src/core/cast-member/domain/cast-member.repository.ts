@@ -14,8 +14,8 @@ import {
 import { CastMember, CastMemberId } from "./cast-member.aggregate";
 
 export type CastMemberSearchTerm = {
-  name?: string;
-  type?: CastMemberType;
+  name?: string | null;
+  type?: CastMemberType | null;
 };
 
 export class CastMemberSearchParams extends DefaultSearchParams<CastMemberSearchTerm> {
@@ -31,8 +31,8 @@ export class CastMemberSearchParams extends DefaultSearchParams<CastMemberSearch
       "searchTerm"
     > & {
       searchTerm?: {
-        name?: string;
-        type?: CastMemberTypes;
+        name?: string | null;
+        type?: CastMemberTypes | null;
       };
     } = {},
   ) {
@@ -70,8 +70,8 @@ export class CastMemberSearchParams extends DefaultSearchParams<CastMemberSearch
         : value;
 
     const searchTerm = {
-      ...(_value.name && { name: `${_value?.name}` }),
-      ...(_value.type && { type: _value.type }),
+      ...(_value?.name && { name: `${_value.name}` }),
+      ...(_value?.type && { type: _value.type }),
     };
 
     this._searchTerm = Object.keys(searchTerm).length === 0 ? null : searchTerm;

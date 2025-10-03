@@ -15,7 +15,7 @@ export class CategoryInMemoryRepository
 
   protected async applySearchTerm(
     items: Category[],
-    searchTerm: CategorySearchTerm,
+    searchTerm: CategorySearchTerm | null,
   ): Promise<Category[]> {
     if (!searchTerm) return items;
 
@@ -36,8 +36,8 @@ export class CategoryInMemoryRepository
 
   protected applySort(
     items: Category[],
-    sort: string,
-    sort_dir: SortDirection,
+    sort: string | null,
+    sort_dir: SortDirection | null,
   ): Category[] {
     if (sort) {
       return super.applySort(items, sort, sort_dir);

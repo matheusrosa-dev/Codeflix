@@ -103,7 +103,7 @@ export abstract class InMemorySearchableRepository<
 
   protected abstract applySearchTerm(
     items: E[],
-    searchTerm: SearchTerm,
+    searchTerm: SearchTerm | null,
   ): Promise<E[]>;
 
   protected applyPagination(items: E[], page: number, per_page: number) {
@@ -115,8 +115,8 @@ export abstract class InMemorySearchableRepository<
 
   protected applySort(
     items: E[],
-    sort: string,
-    sort_dir: SortDirection,
+    sort: string | null,
+    sort_dir: SortDirection | null,
     custom_getter?: (sort: string, item: E) => any,
   ) {
     if (!sort || !this.sortableFields.includes(sort)) {

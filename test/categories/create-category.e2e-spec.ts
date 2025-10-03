@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import request from "supertest";
 import { CreateCategoryFixture } from "../../src/nest-modules/categories/testing/category-fixture";
 import { ICategoryRepository } from "../../src/core/category/domain/category.repository";
@@ -13,7 +12,7 @@ describe("CategoriesController (e2e)", () => {
   const appHelper = startApp();
   let categoryRepo: ICategoryRepository;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     categoryRepo = appHelper.app.get<ICategoryRepository>(
       CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
     );
@@ -70,7 +69,7 @@ describe("CategoriesController (e2e)", () => {
           const categoryCreated = await categoryRepo.findById(new Uuid(id));
 
           const presenter = CategoriesController.serialize(
-            CategoryOutputMapper.toOutput(categoryCreated),
+            CategoryOutputMapper.toOutput(categoryCreated!),
           );
           const serialized = instanceToPlain(presenter);
 

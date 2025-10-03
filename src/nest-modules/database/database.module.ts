@@ -12,7 +12,7 @@ const models = [CategoryModel, CastMemberModel];
     SequelizeModule.forRootAsync({
       useFactory: (configService: ConfigService<CONFIG_SCHEMA_TYPE>) => {
         const dbVendor: CONFIG_SCHEMA_TYPE["DB_VENDOR"] =
-          configService.get("DB_VENDOR");
+          configService.get("DB_VENDOR")!;
 
         if (dbVendor === "sqlite") {
           return {

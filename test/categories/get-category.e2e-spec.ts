@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import request from "supertest";
 import { instanceToPlain } from "class-transformer";
 import { ICategoryRepository } from "../../src/core/category/domain/category.repository";

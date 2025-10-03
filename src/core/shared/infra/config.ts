@@ -2,13 +2,8 @@ import { config as readEnv } from "dotenv";
 import { join } from "path";
 import { SequelizeOptions } from "sequelize-typescript";
 
-type Env = {
-  DB_HOST: string;
-  DB_LOGGING: string;
-};
-
 export class Config {
-  static env: Env = null;
+  static env: any = null;
 
   static db(): SequelizeOptions {
     Config.readEnv();
@@ -28,6 +23,6 @@ export class Config {
     Config.env = readEnv({
       path: join(__dirname, `../../../../envs/.env.${process.env.NODE_ENV}`),
       quiet: true,
-    }).parsed as Env;
+    }).parsed;
   }
 }

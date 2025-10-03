@@ -17,20 +17,17 @@ export class Notification {
   }
 
   setError(error: string | string[], field?: string) {
-    const isArray = Array.isArray(error);
-
-    if (!field) {
-      if (!isArray) {
-        this.errors.set(error, error);
+    if (field) {
+      this.errors.set(field, Array.isArray(error) ? error : [error]);
+    } else {
+      if (Array.isArray(error)) {
+        error.forEach((value) => {
+          this.errors.set(value, value);
+        });
         return;
       }
-
-      error.forEach((value) => {
-        this.errors.set(value, value);
-      });
+      this.errors.set(error, error);
     }
-
-    this.errors.set(field, isArray ? error : [error]);
   }
 
   hasErrors(): boolean {
