@@ -121,7 +121,7 @@ describe("CastMembersController Unit Tests", () => {
       page: 1,
       per_page: 2,
       sort: "name",
-      sort_dir: "desc" as SortDirection,
+      sort_dir: SortDirection.DESC,
       searchTerm: { name: "actor test" },
     };
     const presenter = await controller.search(searchParams);

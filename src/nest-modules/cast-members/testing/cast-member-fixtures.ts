@@ -403,7 +403,7 @@ export class ListCastMembersFixture {
           page: 1,
           per_page: 2,
           sort: "created_at",
-          sort_dir: "desc" as SortDirection,
+          sort_dir: SortDirection.DESC,
           searchTerm: { type: CastMemberTypes.ACTOR },
         },
         expected: {
@@ -421,7 +421,7 @@ export class ListCastMembersFixture {
           page: 2,
           per_page: 2,
           sort: "created_at",
-          sort_dir: "desc" as SortDirection,
+          sort_dir: SortDirection.DESC,
           searchTerm: { type: CastMemberTypes.ACTOR },
         },
         expected: {
@@ -442,7 +442,7 @@ export class ListCastMembersFixture {
           page: 1,
           per_page: 2,
           sort: "created_at",
-          sort_dir: "desc" as SortDirection,
+          sort_dir: SortDirection.DESC,
           searchTerm: { type: CastMemberTypes.DIRECTOR },
         },
         expected: {

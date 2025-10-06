@@ -1,4 +1,4 @@
-import { CategoriesIdExistsInStorageValidator } from "../../../../category/app/validations/categories-ids-exists-in-storage.validator";
+import { CategoriesIdExistsInDatabaseValidator } from "../../../../category/app/validations/categories-ids-exists-in-database.validator";
 import { ICategoryRepository } from "../../../../category/domain/category.repository";
 import { IUseCase } from "../../../../shared/app/use-case.interface";
 import { NotFoundError } from "../../../../shared/domain/errors/not-found.error";
@@ -16,7 +16,7 @@ export class UpdateGenreUseCase
     private uow: IUnitOfWork,
     private genreRepo: IGenreRepository,
     private categoryRepo: ICategoryRepository,
-    private categoriesIdExistsInStorageValidator: CategoriesIdExistsInStorageValidator,
+    private CategoriesIdExistsInDatabaseValidator: CategoriesIdExistsInDatabaseValidator,
   ) {}
 
   async execute(input: UpdateGenreInput): Promise<UpdateGenreOutput> {
@@ -43,7 +43,7 @@ export class UpdateGenreUseCase
 
     if (input.categories_id) {
       const [categoriesId, errorsCategoriesId] = (
-        await this.categoriesIdExistsInStorageValidator.validate(
+        await this.CategoriesIdExistsInDatabaseValidator.validate(
           input.categories_id,
         )
       ).asArray();

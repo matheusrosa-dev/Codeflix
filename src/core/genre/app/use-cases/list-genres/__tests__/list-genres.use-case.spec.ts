@@ -399,7 +399,7 @@ describe("ListGenresUseCase Unit Tests", () => {
           page: 1,
           per_page: 2,
           sort: "name",
-          sort_dir: "desc" as SortDirection,
+          sort_dir: SortDirection.DESC,
         },
         output: {
           items: [
@@ -417,7 +417,7 @@ describe("ListGenresUseCase Unit Tests", () => {
           page: 2,
           per_page: 2,
           sort: "name",
-          sort_dir: "desc" as SortDirection,
+          sort_dir: SortDirection.DESC,
         },
         output: {
           items: [

@@ -1,6 +1,15 @@
-
 ### Cria categoria
 POST http://localhost:3333/categories
+Content-Type: application/json
+
+{
+    "name": "Categoria 1",
+    "description": "Descrição 1"
+}
+
+
+### Edita categoria
+PATCH http://localhost:3333/categories/20aadf40-571e-4a59-a420-46a5da983138
 Content-Type: application/json
 
 {
@@ -16,7 +25,7 @@ GET http://localhost:3333/categories
 ### Busca categoria pelo id
 GET http://localhost:3333/categories/f47ac10b-58cc-4372-a567-0e02b2c3d479
 
-### ------------------
+### --------------------------------------------------------------------------------------
 
 ### Cria membro do elenco
 POST http://localhost:3333/cast-members
@@ -27,9 +36,45 @@ Content-Type: application/json
     "type": "Director"
 }
 
+### Edita membro do elenco
+PATCH http://localhost:3333/cast-members/2f6b750c-5256-4801-a730-4968287aaaae
+Content-Type: application/json
+
+{
+    "name": "Ator 2",
+    "type": "Actor"
+}
+
 ### Lista membros do elenco
 GET http://localhost:3333/cast-members
 
 
 ### Busca membro do elenco pelo id
 GET http://localhost:3333/cast-members/3d698a23-703f-4aa9-bf29-482db2747c22
+
+### --------------------------------------------------------------------------------------
+
+### Cria membro do elenco
+POST http://localhost:3333/genres
+Content-Type: application/json
+
+{
+    "name": "Genero 1",
+    "categories_id": ["20aadf40-571e-4a59-a420-46a5da983138"]
+}
+
+### Edita membro do elenco
+PATCH http://localhost:3333/genres/0917bc1e-a3e4-48a2-a894-44ec8adaa2e6
+Content-Type: application/json
+
+{
+    "name": "Genero 1",
+    "categories_id": ["7332d733-7dc5-4f28-82b2-4883de8806f0"]
+}
+
+### Lista gêneros
+GET http://localhost:3333/genres
+
+
+### Busca gênero pelo id
+GET http://localhost:3333/genres/0917bc1e-a3e4-48a2-a894-44ec8adaa2e6

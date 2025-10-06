@@ -265,7 +265,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
           page: 1,
           per_page: 2,
           sort: "name",
-          sort_dir: "desc" as SortDirection,
+          sort_dir: SortDirection.DESC,
         },
         output: {
           items: [castMembers[3], castMembers[2]].map(
@@ -282,7 +282,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
           page: 2,
           per_page: 2,
           sort: "name",
-          sort_dir: "desc" as SortDirection,
+          sort_dir: SortDirection.DESC,
         },
         output: {
           items: [castMembers[4], castMembers[0]].map(
