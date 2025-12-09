@@ -18,9 +18,9 @@ describe("GetCastMemberUseCase Unit Tests", () => {
 
   it("should throws error when entity not found", async () => {
     const castMemberId = new CastMemberId();
-    await expect(() =>
-      useCase.execute({ id: castMemberId.id }),
-    ).rejects.toThrow(new NotFoundError(castMemberId.id, CastMember));
+    await expect(useCase.execute({ id: castMemberId.id })).rejects.toThrow(
+      new NotFoundError(castMemberId.id, CastMember),
+    );
   });
 
   it("should returns a cast member", async () => {

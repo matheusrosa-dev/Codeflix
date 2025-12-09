@@ -18,7 +18,7 @@ describe("DeleteCategoryUseCase Integration Tests", () => {
 
   it("should throws error when entity not found", async () => {
     const categoryId = new CategoryId();
-    await expect(() => useCase.execute({ id: categoryId.id })).rejects.toThrow(
+    await expect(useCase.execute({ id: categoryId.id })).rejects.toThrow(
       new NotFoundError(categoryId.id, Category),
     );
   });

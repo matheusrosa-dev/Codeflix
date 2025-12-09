@@ -1,4 +1,5 @@
 import { Category, CategoryId } from "../category.aggregate";
+import "../../../shared/infra/testing/expect-helpers";
 
 describe("Category Without Validator Unit Tests", () => {
   beforeEach(() => {

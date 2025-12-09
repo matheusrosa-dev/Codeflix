@@ -14,13 +14,13 @@ describe("UpdateCategoryUseCase Unit Tests", () => {
   });
 
   it("should throws error when entity not found", async () => {
-    await expect(() =>
+    await expect(
       useCase.execute({ id: "fake id", name: "fake" }),
     ).rejects.toThrow(new InvalidUuidError());
 
     const categoryId = new CategoryId();
 
-    await expect(() =>
+    await expect(
       useCase.execute({ id: categoryId.id, name: "fake" }),
     ).rejects.toThrow(new NotFoundError(categoryId.id, Category));
   });
@@ -28,7 +28,7 @@ describe("UpdateCategoryUseCase Unit Tests", () => {
   it("should throw an error when aggregate is not valid", async () => {
     const aggregate = new Category({ name: "Movie" });
     repository.items = [aggregate];
-    await expect(() =>
+    await expect(
       useCase.execute({
         id: aggregate.category_id.id,
         name: "t".repeat(256),

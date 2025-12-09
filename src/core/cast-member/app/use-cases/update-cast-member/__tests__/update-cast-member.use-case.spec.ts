@@ -20,7 +20,7 @@ describe("UpdateCastMemberUseCase Unit Tests", () => {
   it("should throws error when entity not found", async () => {
     const castMemberId = new CastMemberId();
 
-    await expect(() =>
+    await expect(
       useCase.execute(
         new UpdateCastMemberInput({ id: castMemberId.id, name: "fake" }),
       ),

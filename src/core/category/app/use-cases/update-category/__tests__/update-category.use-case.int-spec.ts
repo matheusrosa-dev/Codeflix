@@ -18,7 +18,7 @@ describe("UpdateCategoryUseCase Integration Tests", () => {
 
   it("should throws error when entity not found", async () => {
     const categoryId = new CategoryId();
-    await expect(() =>
+    await expect(
       useCase.execute({ id: categoryId.id, name: "fake" }),
     ).rejects.toThrow(new NotFoundError(categoryId.id, Category));
   });

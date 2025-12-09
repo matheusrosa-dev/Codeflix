@@ -12,7 +12,7 @@ describe("CreateCategoryUseCase Unit Tests", () => {
 
   it("should throw an error when aggregate is not valid", async () => {
     const input = { name: "t".repeat(256) };
-    await expect(() => useCase.execute(input)).rejects.toThrow(
+    await expect(useCase.execute(input)).rejects.toThrow(
       "Entity Validation Error",
     );
   });
