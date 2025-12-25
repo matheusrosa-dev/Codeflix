@@ -4,6 +4,8 @@ import { AggregateRoot } from "../../shared/domain/aggregate-root";
 import { GenreId } from "../../genre/domain/genre.aggregate";
 import { CastMemberId } from "../../cast-member/domain/cast-member.aggregate";
 import { Rating } from "./rating.vo";
+import { Banner } from "./banner.vo";
+import { Thumbnail } from "./thumbnail.vo";
 
 export type VideoConstructorProps = {
   video_id?: VideoId;
@@ -12,9 +14,12 @@ export type VideoConstructorProps = {
   year_launched: number;
   duration: number;
   rating: Rating;
-
   is_opened: boolean;
   is_published: boolean;
+
+  banner?: Banner;
+  thumbnail?: Thumbnail;
+  thumbnail_half?: Thumbnail;
 
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
@@ -28,8 +33,11 @@ export type VideoCreateCommand = {
   year_launched: number;
   duration: number;
   rating: Rating;
-
   is_opened: boolean;
+
+  banner?: Banner;
+  thumbnail?: Thumbnail;
+  thumbnail_half?: Thumbnail;
 
   categories_id: CategoryId[];
   genres_id: GenreId[];
@@ -47,9 +55,15 @@ export class Video extends AggregateRoot {
   rating: Rating;
   is_opened: boolean;
   is_published: boolean; //uploads
+
+  banner: Banner | null;
+  thumbnail: Thumbnail | null;
+  thumbnail_half: Thumbnail | null;
+
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
   cast_members_id: Map<string, CastMemberId>;
+
   created_at: Date;
 
   constructor(props: VideoConstructorProps) {
@@ -62,6 +76,11 @@ export class Video extends AggregateRoot {
     this.rating = props.rating;
     this.is_opened = props.is_opened;
     this.is_published = props.is_published;
+
+    this.banner = props.banner ?? null;
+    this.thumbnail = props.thumbnail ?? null;
+    this.thumbnail_half = props.thumbnail_half ?? null;
+
     this.categories_id = props.categories_id;
     this.genres_id = props.genres_id;
     this.cast_members_id = props.cast_members_id;
@@ -156,15 +175,6 @@ export class Video extends AggregateRoot {
     this.cast_members_id = new Map(castMembersId.map((id) => [id.id, id]));
   }
 
-  //   validate(fields?: string[]) {
-  //     const validator = VideoValidatorFactory.create();
-  //     return validator.validate(this.notification, this, fields);
-  //   }
-
-  //   static fake() {
-  //     return VideoFakeBuilder;
-  //   }
-
   get entity_id() {
     return this.video_id;
   }
@@ -179,6 +189,9 @@ export class Video extends AggregateRoot {
       rating: this.rating.value,
       is_opened: this.is_opened,
       is_published: this.is_published,
+      banner: this.banner ? this.banner.toJSON() : null,
+      thumbnail: this.thumbnail ? this.thumbnail.toJSON() : null,
+      thumbnail_half: this.thumbnail_half ? this.thumbnail_half.toJSON() : null,
       categories_id: Array.from(this.categories_id.values()).map((id) => id.id),
       genres_id: Array.from(this.genres_id.values()).map((id) => id.id),
       cast_members_id: Array.from(this.cast_members_id.values()).map(
