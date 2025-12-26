@@ -51,10 +51,10 @@ export class VideoFakeBuilder<TBuild = any> {
   private _cast_members_id: PropOrFactory<CastMemberId>[] = [];
 
   private _created_at: PropOrFactory<Date> | undefined;
-
   private countObjs: number;
+  private chance: Chance.Chance;
 
-  static aVideoWithoutMedias() {
+  static oneVideoWithoutMedias() {
     return new VideoFakeBuilder<Video>()
       .withoutBanner()
       .withoutThumbnail()
@@ -63,11 +63,11 @@ export class VideoFakeBuilder<TBuild = any> {
       .withoutVideo();
   }
 
-  static aVideoWithAllMedias() {
+  static oneVideoWithAllMedias() {
     return new VideoFakeBuilder<Video>();
   }
 
-  static theVideosWithoutMedias(countObjs: number) {
+  static manyVideosWithoutMedias(countObjs: number) {
     return new VideoFakeBuilder<Video[]>(countObjs)
       .withoutBanner()
       .withoutThumbnail()
@@ -76,11 +76,9 @@ export class VideoFakeBuilder<TBuild = any> {
       .withoutVideo();
   }
 
-  static theVideosWithAllMedias(countObjs: number) {
+  static manyVideosWithAllMedias(countObjs: number) {
     return new VideoFakeBuilder<Video[]>(countObjs);
   }
-
-  private chance: Chance.Chance;
 
   private constructor(countObjs: number = 1) {
     this.countObjs = countObjs;
