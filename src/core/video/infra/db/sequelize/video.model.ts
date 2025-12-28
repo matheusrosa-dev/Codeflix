@@ -10,8 +10,8 @@ import {
 } from "sequelize-typescript";
 import { RatingValues } from "../../../domain/rating.vo";
 import { CategoryModel } from "../../../../category/infra/db/sequelize/category.model";
-import { AudioVideoMediaModel } from "./audio-video-media.model";
 import { ImageMediaModel } from "./image-media.model";
+import { AudioVideoMediaModel } from "./audio-video-media.model";
 import { CastMemberModel } from "@core/cast-member/infra/db/sequelize/cast-member.model";
 import { GenreModel } from "@core/genre/infra/db/sequelize/genre.model";
 
@@ -29,11 +29,11 @@ export type VideoModelProps = {
   audio_video_medias: AudioVideoMediaModel[];
 
   categories_id: VideoCategoryModel[];
-  categories: CategoryModel[];
+  categories?: CategoryModel[];
   genres_id: VideoGenreModel[];
-  genres: CategoryModel[];
+  genres?: CategoryModel[];
   cast_members_id: VideoCastMemberModel[];
-  cast_members: CastMemberModel[];
+  cast_members?: CastMemberModel[];
   created_at: Date;
 };
 
