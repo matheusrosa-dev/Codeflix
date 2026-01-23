@@ -48,12 +48,13 @@ describe("DomainEventMediator Unit Tests", () => {
 
   it("should publish handler", async () => {
     expect.assertions(1);
-    mediator.register(StubEvent.name, (event: StubEvent) => {
+    mediator.register(StubEvent.name, async (event: StubEvent) => {
       expect(event.name).toBe("test");
     });
 
     const aggregate = new StubAggregate();
     aggregate.action("test");
+    await mediator.publish(aggregate);
     await mediator.publish(aggregate);
   });
 });
