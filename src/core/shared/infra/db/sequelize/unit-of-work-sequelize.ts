@@ -1,8 +1,10 @@
 import { Sequelize, Transaction } from "sequelize";
 import { IUnitOfWork } from "../../../domain/repository/unit-of-work.interface";
+import { AggregateRoot } from "../../../domain/aggregate-root";
 
 export class UnitOfWorkSequelize implements IUnitOfWork {
   private transaction: Transaction | null;
+  private aggregateRoots: Set<AggregateRoot> = new Set<AggregateRoot>();
 
   constructor(private sequelize: Sequelize) {}
 
@@ -11,7 +13,6 @@ export class UnitOfWorkSequelize implements IUnitOfWork {
       this.transaction = await this.sequelize.transaction();
     }
   }
-
   async commit(): Promise<void> {
     this.validateTransaction();
     await this.transaction!.commit();
@@ -30,7 +31,6 @@ export class UnitOfWorkSequelize implements IUnitOfWork {
 
   async do<T>(workFn: (uow: IUnitOfWork) => Promise<T>): Promise<T> {
     let isAutoTransaction = false;
-
     try {
       if (this.transaction) {
         const result = await workFn(this);
@@ -58,5 +58,12 @@ export class UnitOfWorkSequelize implements IUnitOfWork {
     if (!this.transaction) {
       throw new Error("No transaction started");
     }
+  }
+
+  addAggregateRoot(aggregateRoot: AggregateRoot): void {
+    this.aggregateRoots.add(aggregateRoot);
+  }
+  getAggregateRoots(): AggregateRoot[] {
+    return [...this.aggregateRoots];
   }
 }
