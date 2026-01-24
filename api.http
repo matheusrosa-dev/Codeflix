@@ -1,80 +1,159 @@
+@baseUrl = http://localhost:3333
+
 ### Cria categoria
-POST http://localhost:3333/categories
+# @name createCategory
+POST {{baseUrl}}/categories
 Content-Type: application/json
 
 {
-    "name": "Categoria 1",
-    "description": "Descrição 1"
+    "name": "Categoria",
+    "description": "Descrição"
 }
 
+###
+@categoryId = {{createCategory.response.body.data.id}}
 
 ### Edita categoria
-PATCH http://localhost:3333/categories/20aadf40-571e-4a59-a420-46a5da983138
+PATCH {{baseUrl}}/categories/{{categoryId}}
 Content-Type: application/json
 
 {
-    "name": "Categoria 1",
-    "description": "Descrição 1"
+    "name": "Categoria atualizada",
+    "description": "Descrição atualizada"
 }
 
 
 ### Lista categorias
-GET http://localhost:3333/categories
+GET {{baseUrl}}/categories
 
 
 ### Busca categoria pelo id
-GET http://localhost:3333/categories/f47ac10b-58cc-4372-a567-0e02b2c3d479
+GET {{baseUrl}}/categories/{{categoryId}}
 
 ### --------------------------------------------------------------------------------------
 
 ### Cria membro do elenco
-POST http://localhost:3333/cast-members
+# @name createCastMember
+POST {{baseUrl}}/cast-members
 Content-Type: application/json
 
 {
-    "name": "Diretor 1",
+    "name": "Diretor",
     "type": "Director"
 }
 
+###
+@castMemberId = {{createCastMember.response.body.data.id}}
+
 ### Edita membro do elenco
-PATCH http://localhost:3333/cast-members/2f6b750c-5256-4801-a730-4968287aaaae
+PATCH {{baseUrl}}/cast-members/{{castMemberId}}
 Content-Type: application/json
 
 {
-    "name": "Ator 2",
+    "name": "Ator atualizado",
     "type": "Actor"
 }
 
 ### Lista membros do elenco
-GET http://localhost:3333/cast-members
+GET {{baseUrl}}/cast-members
 
 
 ### Busca membro do elenco pelo id
-GET http://localhost:3333/cast-members/3d698a23-703f-4aa9-bf29-482db2747c22
+GET {{baseUrl}}/cast-members/{{castMemberId}}
 
 ### --------------------------------------------------------------------------------------
 
-### Cria membro do elenco
-POST http://localhost:3333/genres
+### Cria gênero
+# @name createGenre
+POST {{baseUrl}}/genres
 Content-Type: application/json
 
 {
-    "name": "Genero 1",
-    "categories_id": ["20aadf40-571e-4a59-a420-46a5da983138"]
+    "name": "Gênero",
+    "categories_id": ["{{categoryId}}"]
 }
 
+###
+@genreId = {{createGenre.response.body.data.id}}
+
 ### Edita membro do elenco
-PATCH http://localhost:3333/genres/0917bc1e-a3e4-48a2-a894-44ec8adaa2e6
+PATCH {{baseUrl}}/genres/{{genreId}}
 Content-Type: application/json
 
-{
-    "name": "Genero 1",
-    "categories_id": ["7332d733-7dc5-4f28-82b2-4883de8806f0"]
+{   
+    "name": "Genero atualizado",
+    "categories_id": ["{{categoryId}}"]
 }
 
 ### Lista gêneros
-GET http://localhost:3333/genres
+GET {{baseUrl}}/genres
 
 
 ### Busca gênero pelo id
-GET http://localhost:3333/genres/0917bc1e-a3e4-48a2-a894-44ec8adaa2e6
+GET {{baseUrl}}/genres/{{genreId}}
+
+### --------------------------------------------------------------------------------------
+
+### Cria vídeo
+# @name createVideo
+POST {{baseUrl}}/videos
+Content-Type: application/json
+
+{
+    "title": "Vídeo",
+    "description": "Descrição",
+    "year_launched": 2025,
+    "is_opened": false,
+    "rating": "L",
+    "duration": 90,
+    "categories_id": [
+        "{{categoryId}}"
+    ],
+    "genres_id": [
+        "{{genreId}}"
+    ],
+    "cast_members_id": [
+        "{{castMemberId}}"
+    ]
+}
+
+###
+@videoId = {{createVideo.response.body.data.id}}
+
+### Edita vídeo
+# @name updateVideo
+PATCH {{baseUrl}}/videos/{{videoId}}
+Content-Type: application/json
+
+{
+    "title": "Video atualizado",
+    "description": "Descrição atualizada",
+    "year_launched": 2025,
+    "is_opened": false,
+    "rating": "L",
+    "duration": 90,
+    "categories_id": [
+        "{{categoryId}}"
+    ],
+    "genres_id": [
+        "{{genreId}}"
+    ],
+    "cast_members_id": [
+        "{{castMemberId}}"
+    ]
+}
+
+### Busca vídeo pelo id
+GET {{baseUrl}}/videos/{{videoId}}
+
+### Upload de vídeo
+# @name uploadVideo
+PATCH {{baseUrl}}/videos/{{videoId}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary1234
+
+------WebKitFormBoundary1234
+Content-Disposition: form-data; name="video"; filename="video.mp4"
+Content-Type: video/mp4
+
+< ./package.json
+------WebKitFormBoundary1234--

@@ -1,17 +1,17 @@
 services:
-  # app:
-  #   build: .
-  #   command: ./.docker/start.sh
-  #   ports:
-  #     - "3333:3333"
-  #   volumes:
-  #     - .:/home/node/app
+  app:
+    build: .
+    command: ./.docker/start.sh
+    ports:
+      - "3333:3333"
+    volumes:
+      - .:/home/node/app
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
 
   db:
     container_name: micro_videos-tmpfs-db
     image: mysql:8.0.30-debian
-    ports:
-      - "3306:3306"
     environment:
       - MYSQL_DATABASE=micro_videos
       - MYSQL_ROOT_PASSWORD=root
