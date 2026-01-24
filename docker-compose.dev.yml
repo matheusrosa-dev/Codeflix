@@ -1,17 +1,21 @@
 services:
   app:
+    container_name: micro_videos_dev-app
     build: .
-    command: ./.docker/start.sh
+    command: bash ./.docker/start.sh
     ports:
       - "3333:3333"
     volumes:
       - .:/home/node/app
 
   db:
+    container_name: micro_videos_dev-db
     image: mysql:8.0.30-debian
     environment:
       - MYSQL_DATABASE=micro_videos
       - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3306:3306"
     volumes:
       - ./.docker/dbdata:/var/lib/mysql:delegated
     security_opt:
