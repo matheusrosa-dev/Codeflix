@@ -63,13 +63,13 @@ export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE;
 
 type CONFIG_GOOGLE_SCHEMA_TYPE = {
   GOOGLE_CLOUD_CREDENTIALS: object;
-  GOOGLE_CLOUD_STORAGE_BUCKET_NAME: string;
+  GOOGLE_CLOUD_STORAGE_BUCKET: string;
 };
 
 export const CONFIG_GOOGLE_SCHEMA: Joi.StrictSchemaMap<CONFIG_GOOGLE_SCHEMA_TYPE> =
   {
     GOOGLE_CLOUD_CREDENTIALS: joiJson.object().required(),
-    GOOGLE_CLOUD_STORAGE_BUCKET_NAME: Joi.string().required(),
+    GOOGLE_CLOUD_STORAGE_BUCKET: Joi.string().required(),
   };
 
 @Module({})

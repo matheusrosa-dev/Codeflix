@@ -1,4 +1,4 @@
-import { ConfigModule, configDbSchema } from "../config.module";
+import { ConfigModule, CONFIG_DB_SCHEMA } from "../config.module";
 import * as Joi from "joi";
 import { Test } from "@nestjs/testing";
 import { join } from "path";
@@ -11,7 +11,7 @@ function expectValidate(schema: Joi.Schema, value: any) {
 describe("Schema Unit Tests", () => {
   describe("DB Schema", () => {
     const schema = Joi.object({
-      ...configDbSchema,
+      ...CONFIG_DB_SCHEMA,
     });
 
     describe("DB_VENDOR", () => {

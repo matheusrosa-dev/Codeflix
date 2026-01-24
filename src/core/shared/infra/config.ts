@@ -18,7 +18,7 @@ export class Config {
   static bucketName() {
     Config.readEnv();
 
-    return Config.env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME;
+    return Config.env.GOOGLE_CLOUD_STORAGE_BUCKET;
   }
 
   static googleCredentials() {
