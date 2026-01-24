@@ -7,6 +7,7 @@ import { GetCastMemberUseCase } from "@core/cast-member/app/use-cases/get-cast-m
 import { DeleteCastMemberUseCase } from "@core/cast-member/app/use-cases/delete-cast-member/delete-cast-member.use-case";
 import { CastMemberSequelizeRepository } from "@core/cast-member/infra/db/sequelize/cast-member-sequelize.repository";
 import { ICastMemberRepository } from "@core/cast-member/domain/cast-member.repository";
+import { CastMembersIdExistsInDatabaseValidator } from "@core/cast-member/app/validations/cast-members-ids-exists-in-database.validator";
 import { CastMemberModel } from "@core/cast-member/infra/db/sequelize/cast-member.model";
 
 export const REPOSITORIES = {
@@ -65,7 +66,18 @@ export const USE_CASES = {
   },
 };
 
+export const VALIDATIONS = {
+  CAST_MEMBERS_IDS_EXISTS_IN_DATABASE_VALIDATOR: {
+    provide: CastMembersIdExistsInDatabaseValidator,
+    useFactory: (castMemberRepo: ICastMemberRepository) => {
+      return new CastMembersIdExistsInDatabaseValidator(castMemberRepo);
+    },
+    inject: [REPOSITORIES.CAST_MEMBER_REPOSITORY.provide],
+  },
+};
+
 export const CAST_MEMBERS_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
+  VALIDATIONS,
 };

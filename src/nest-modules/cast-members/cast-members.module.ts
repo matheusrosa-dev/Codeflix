@@ -9,6 +9,7 @@ import { CastMemberModel } from "@core/cast-member/infra/db/sequelize/cast-membe
   providers: [
     ...Object.values(CAST_MEMBERS_PROVIDERS.REPOSITORIES),
     ...Object.values(CAST_MEMBERS_PROVIDERS.USE_CASES),
+    ...Object.values(CAST_MEMBERS_PROVIDERS.VALIDATIONS),
   ],
   exports: [CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide],
 })
