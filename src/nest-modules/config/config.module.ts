@@ -6,6 +6,25 @@ import {
 import Joi from "joi";
 import { join } from "path";
 
+//@ts-expect-error - the type is correct
+const joiJson = Joi.extend((joi) => {
+  return {
+    type: "object",
+    base: joi.object(),
+    coerce(value, _schema) {
+      if (value[0] !== "{" && !/^\s*\{/.test(value)) {
+        return;
+      }
+
+      try {
+        return { value: JSON.parse(value) };
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  };
+});
+
 type DB_SCHEMA_TYPE = {
   DB_VENDOR: "mysql" | "sqlite";
   DB_HOST: string;
@@ -17,7 +36,7 @@ type DB_SCHEMA_TYPE = {
   DB_AUTO_LOAD_MODELS: boolean;
 };
 
-export const configDbSchema: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
+export const CONFIG_DB_SCHEMA: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
   DB_VENDOR: Joi.string().required().valid("mysql", "sqlite"),
   DB_HOST: Joi.string().required(),
   DB_DATABASE: Joi.string().when("DB_VENDOR", {
@@ -42,6 +61,17 @@ export const configDbSchema: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
 
 export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE;
 
+type CONFIG_GOOGLE_SCHEMA_TYPE = {
+  GOOGLE_CLOUD_CREDENTIALS: object;
+  GOOGLE_CLOUD_STORAGE_BUCKET_NAME: string;
+};
+
+export const CONFIG_GOOGLE_SCHEMA: Joi.StrictSchemaMap<CONFIG_GOOGLE_SCHEMA_TYPE> =
+  {
+    GOOGLE_CLOUD_CREDENTIALS: joiJson.object().required(),
+    GOOGLE_CLOUD_STORAGE_BUCKET_NAME: Joi.string().required(),
+  };
+
 @Module({})
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}) {
@@ -50,12 +80,13 @@ export class ConfigModule extends NestConfigModule {
     return super.forRoot({
       isGlobal: true,
       envFilePath: [
-        ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath!]),
-        join(process.cwd(), "envs", `.env.${process.env.NODE_ENV}`),
+        ...(Array.isArray(envFilePath) ? envFilePath! : [envFilePath!]),
+        join(process.cwd(), "envs", `.env.${process.env.NODE_ENV!}`),
         join(process.cwd(), "envs", `.env`),
       ],
       validationSchema: Joi.object({
-        ...configDbSchema,
+        ...CONFIG_DB_SCHEMA,
+        ...CONFIG_GOOGLE_SCHEMA,
       }),
       ...otherOptions,
     });
