@@ -6,12 +6,14 @@ import { SharedModule } from "./nest-modules/shared/shared.module";
 import { CastMembersModule } from "./nest-modules/cast-members/cast-members.module";
 import { GenresModule } from "./nest-modules/genres/genres.module";
 import { VideosModule } from "./nest-modules/videos/videos.module";
+import { UseCaseModule } from "./nest-modules/use-cases/use-cases.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     DatabaseModule,
     SharedModule,
+    UseCaseModule,
     CategoriesModule,
     CastMembersModule,
     GenresModule,

@@ -21,6 +21,7 @@ import { UpdateVideoUseCase } from "@core/video/app/use-cases/update-video/updat
 import { UploadAudioVideoMediasUseCase } from "@core/video/app/use-cases/upload-audio-video-medias/upload-audio-video-medias.use-case";
 import { GetVideoUseCase } from "@core/video/app/use-cases/get-video/get-video.use-case";
 import { ProcessAudioVideoMediasUseCase } from "@core/video/app/use-cases/process-audio-video-medias/process-audio-video-medias.use-case";
+import { PublishVideoMediaReplacedInQueueHandler } from "@core/video/app/handlers/publish-video-media-replaced-in-queue.handler";
 
 export const REPOSITORIES = {
   VIDEO_REPOSITORY: {
@@ -143,7 +144,15 @@ export const USE_CASES = {
   },
 };
 
+export const HANDLERS = {
+  PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
+    provide: PublishVideoMediaReplacedInQueueHandler,
+    useClass: PublishVideoMediaReplacedInQueueHandler,
+  },
+};
+
 export const VIDEOS_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
+  HANDLERS,
 };
