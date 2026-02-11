@@ -22,6 +22,7 @@ services:
       - seccomp:unconfined
 
   rabbitmq:
+    container_name: micro_videos-rabbitmq
     image: rabbitmq:3.8-management-alpine
     ports:
       - 15672:15672

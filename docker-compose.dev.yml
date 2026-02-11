@@ -24,9 +24,11 @@ services:
       - seccomp:unconfined
 
   rabbitmq:
+    container_name: micro_videos_dev-rabbitmq
     image: rabbitmq:3.8-management-alpine
     ports:
       - 15672:15672
+      - 5672:5672
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin

@@ -24,6 +24,7 @@
     "test:e2e:watch": "jest --config ./test/jest-e2e.config.ts --watch --runInBand"
   },
   "dependencies": {
+    "@golevelup/nestjs-rabbitmq": "^7.1.2",
     "@google-cloud/storage": "^7.18.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
