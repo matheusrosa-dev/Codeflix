@@ -1,99 +1,103 @@
 import { ValueObject } from "../value-object";
 
 export enum SortDirection {
-  ASC = "asc",
-  DESC = "desc",
+	ASC = "asc",
+	DESC = "desc",
 }
 
 export type SearchParamsConstructorProps<SearchTerm = string> = {
-  page?: number;
-  per_page?: number;
-  sort?: string | null;
-  sort_dir?: SortDirection | null;
-  searchTerm?: SearchTerm | null;
+	page?: number;
+	per_page?: number;
+	sort?: string | null;
+	sort_dir?: SortDirection | null;
+	searchTerm?: SearchTerm | null;
 };
 
 export class SearchParams<SearchTerm = string> extends ValueObject {
-  protected _page: number;
-  protected _per_page: number = 15;
-  protected _sort: string | null;
-  protected _sort_dir: SortDirection | null;
-  protected _searchTerm: SearchTerm | null;
+	protected _page: number;
+	protected _per_page: number = 15;
+	protected _sort: string | null;
+	protected _sort_dir: SortDirection | null;
+	protected _searchTerm: SearchTerm | null;
 
-  constructor(props = {} as SearchParamsConstructorProps<SearchTerm>) {
-    super();
-    this.page = props.page!;
-    this.per_page = props.per_page!;
-    this.sort = props.sort!;
-    this.sort_dir = props.sort_dir!;
-    this.searchTerm = props.searchTerm!;
-  }
+	constructor(props = {} as SearchParamsConstructorProps<SearchTerm>) {
+		super();
+		this.page = props.page!;
+		this.per_page = props.per_page!;
+		this.sort = props.sort!;
+		this.sort_dir = props.sort_dir!;
+		this.searchTerm = props.searchTerm!;
+	}
 
-  get page() {
-    return this._page;
-  }
+	get page() {
+		return this._page;
+	}
 
-  private set page(value: number) {
-    let _page = +value;
+	private set page(value: number) {
+		let _page = +value;
 
-    if (Number.isNaN(_page) || _page <= 0 || parseInt(_page as any) !== _page) {
-      _page = 1;
-    }
+		if (
+			Number.isNaN(_page) ||
+			_page <= 0 ||
+			parseInt(_page as any, 10) !== _page
+		) {
+			_page = 1;
+		}
 
-    this._page = _page;
-  }
+		this._page = _page;
+	}
 
-  get per_page() {
-    return this._per_page;
-  }
+	get per_page() {
+		return this._per_page;
+	}
 
-  private set per_page(value: number) {
-    let _per_page = value === (true as any) ? this._per_page : +value;
+	private set per_page(value: number) {
+		let _per_page = value === (true as any) ? this._per_page : +value;
 
-    if (
-      Number.isNaN(_per_page) ||
-      _per_page <= 0 ||
-      parseInt(_per_page as any) !== _per_page
-    ) {
-      _per_page = this._per_page;
-    }
+		if (
+			Number.isNaN(_per_page) ||
+			_per_page <= 0 ||
+			parseInt(_per_page as any, 10) !== _per_page
+		) {
+			_per_page = this._per_page;
+		}
 
-    this._per_page = _per_page;
-  }
+		this._per_page = _per_page;
+	}
 
-  get sort() {
-    return this._sort;
-  }
+	get sort() {
+		return this._sort;
+	}
 
-  private set sort(value: string | null) {
-    this._sort =
-      value === null || value === undefined || value === "" ? null : `${value}`;
-  }
+	private set sort(value: string | null) {
+		this._sort =
+			value === null || value === undefined || value === "" ? null : `${value}`;
+	}
 
-  get sort_dir() {
-    return this._sort_dir;
-  }
+	get sort_dir() {
+		return this._sort_dir;
+	}
 
-  private set sort_dir(value: SortDirection | null) {
-    if (!this.sort) {
-      this._sort_dir = null;
-      return;
-    }
-    const dir = `${value}`.toLowerCase() as SortDirection;
-    this._sort_dir =
-      dir !== SortDirection.ASC && dir !== SortDirection.DESC
-        ? SortDirection.ASC
-        : dir;
-  }
+	private set sort_dir(value: SortDirection | null) {
+		if (!this.sort) {
+			this._sort_dir = null;
+			return;
+		}
+		const dir = `${value}`.toLowerCase() as SortDirection;
+		this._sort_dir =
+			dir !== SortDirection.ASC && dir !== SortDirection.DESC
+				? SortDirection.ASC
+				: dir;
+	}
 
-  get searchTerm(): SearchTerm | null {
-    return this._searchTerm;
-  }
+	get searchTerm(): SearchTerm | null {
+		return this._searchTerm;
+	}
 
-  protected set searchTerm(value: SearchTerm) {
-    this._searchTerm =
-      value === null || value === undefined || (value as unknown) === ""
-        ? null
-        : (`${value}` as any);
-  }
+	protected set searchTerm(value: SearchTerm) {
+		this._searchTerm =
+			value === null || value === undefined || (value as unknown) === ""
+				? null
+				: (`${value}` as any);
+	}
 }

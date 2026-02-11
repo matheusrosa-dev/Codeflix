@@ -4,18 +4,18 @@ import { CastMemberTypes } from "../../../domain/cast-member-type.vo";
 import { IsEnum, ValidateNested } from "class-validator";
 
 export class ListCastMembersSearchTerm {
-  name?: string | null;
-  @IsEnum(CastMemberTypes)
-  type?: CastMemberTypes | null;
+	name?: string | null;
+	@IsEnum(CastMemberTypes)
+	type?: CastMemberTypes | null;
 }
 
 export class ListCastMembersInput
-  implements SearchInput<ListCastMembersSearchTerm>
+	implements SearchInput<ListCastMembersSearchTerm>
 {
-  page?: number;
-  per_page?: number;
-  sort?: string;
-  sort_dir?: SortDirection;
-  @ValidateNested()
-  searchTerm?: ListCastMembersSearchTerm;
+	page?: number;
+	per_page?: number;
+	sort?: string;
+	sort_dir?: SortDirection;
+	@ValidateNested()
+	searchTerm?: ListCastMembersSearchTerm;
 }

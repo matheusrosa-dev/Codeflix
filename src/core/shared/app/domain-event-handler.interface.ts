@@ -1,12 +1,12 @@
 import {
-  IDomainEvent,
-  IIntegrationEvent,
-} from '../domain/events/domain-event.interface';
+	IDomainEvent,
+	IIntegrationEvent,
+} from "../domain/events/domain-event.interface";
 
 export interface IDomainEventHandler {
-  handle(event: IDomainEvent): Promise<void>;
+	handle(event: IDomainEvent): Promise<void>;
 }
 
 export interface IIntegrationEventHandler {
-  handle(event: IIntegrationEvent): Promise<void>;
+	handle(event: IIntegrationEvent): Promise<void>;
 }

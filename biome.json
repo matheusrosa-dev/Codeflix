@@ -19,18 +19,22 @@
 			"performance": {
 				"noAccumulatingSpread": "off"
 			},
+			"correctness": {
+				"noUnusedVariables": "error"
+			},
 			"suspicious": {
 				"noAssignInExpressions": "off",
 				"noConfusingVoidType": "off",
-				"noExplicitAny": "off",
-				"noThenProperty": "off"
+				"noThenProperty": "off",
+				"noExplicitAny": "warn"
 			},
 			"complexity": {
 				"noStaticOnlyClass": "off",
 				"useLiteralKeys": "off"
 			},
 			"style": {
-				"noNonNullAssertion": "off"
+				"noNonNullAssertion": "off",
+				"useImportType": "off"
 			}
 		}
 	},

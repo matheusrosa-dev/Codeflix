@@ -5,37 +5,37 @@ import { CategoryInMemoryRepository } from "../../../../infra/db/in-memory/categ
 import { GetCategoryUseCase } from "../get-category.use-case";
 
 describe("GetCategoryUseCase Unit Tests", () => {
-  let useCase: GetCategoryUseCase;
-  let repository: CategoryInMemoryRepository;
+	let useCase: GetCategoryUseCase;
+	let repository: CategoryInMemoryRepository;
 
-  beforeEach(() => {
-    repository = new CategoryInMemoryRepository();
-    useCase = new GetCategoryUseCase(repository);
-  });
+	beforeEach(() => {
+		repository = new CategoryInMemoryRepository();
+		useCase = new GetCategoryUseCase(repository);
+	});
 
-  it("should throws error when entity not found", async () => {
-    await expect(() => useCase.execute({ id: "fake id" })).rejects.toThrow(
-      new InvalidUuidError(),
-    );
+	it("should throws error when entity not found", async () => {
+		await expect(() => useCase.execute({ id: "fake id" })).rejects.toThrow(
+			new InvalidUuidError(),
+		);
 
-    const categoryId = new CategoryId();
-    await expect(() => useCase.execute({ id: categoryId.id })).rejects.toThrow(
-      new NotFoundError(categoryId.id, Category),
-    );
-  });
+		const categoryId = new CategoryId();
+		await expect(() => useCase.execute({ id: categoryId.id })).rejects.toThrow(
+			new NotFoundError(categoryId.id, Category),
+		);
+	});
 
-  it("should returns a category", async () => {
-    const items = [Category.create({ name: "Movie" })];
-    repository.items = items;
-    const spyFindById = jest.spyOn(repository, "findById");
-    const output = await useCase.execute({ id: items[0].category_id.id });
-    expect(spyFindById).toHaveBeenCalledTimes(1);
-    expect(output).toStrictEqual({
-      id: items[0].category_id.id,
-      name: "Movie",
-      description: null,
-      is_active: true,
-      created_at: items[0].created_at,
-    });
-  });
+	it("should returns a category", async () => {
+		const items = [Category.create({ name: "Movie" })];
+		repository.items = items;
+		const spyFindById = jest.spyOn(repository, "findById");
+		const output = await useCase.execute({ id: items[0].category_id.id });
+		expect(spyFindById).toHaveBeenCalledTimes(1);
+		expect(output).toStrictEqual({
+			id: items[0].category_id.id,
+			name: "Movie",
+			description: null,
+			is_active: true,
+			created_at: items[0].created_at,
+		});
+	});
 });

@@ -1,55 +1,55 @@
 export class Notification {
-  errors = new Map<string, string[] | string>();
+	errors = new Map<string, string[] | string>();
 
-  addError(error: string, field?: string) {
-    if (!field) {
-      this.errors.set(error, error);
-      return;
-    }
+	addError(error: string, field?: string) {
+		if (!field) {
+			this.errors.set(error, error);
+			return;
+		}
 
-    const errors = (this.errors.get(field) ?? []) as string[];
+		const errors = (this.errors.get(field) ?? []) as string[];
 
-    if (errors.indexOf(error) === -1) {
-      errors.push(error);
-    }
+		if (errors.indexOf(error) === -1) {
+			errors.push(error);
+		}
 
-    this.errors.set(field, errors);
-  }
+		this.errors.set(field, errors);
+	}
 
-  setError(error: string | string[], field?: string) {
-    if (field) {
-      this.errors.set(field, Array.isArray(error) ? error : [error]);
-    } else {
-      if (Array.isArray(error)) {
-        error.forEach((value) => {
-          this.errors.set(value, value);
-        });
-        return;
-      }
-      this.errors.set(error, error);
-    }
-  }
+	setError(error: string | string[], field?: string) {
+		if (field) {
+			this.errors.set(field, Array.isArray(error) ? error : [error]);
+		} else {
+			if (Array.isArray(error)) {
+				error.forEach((value) => {
+					this.errors.set(value, value);
+				});
+				return;
+			}
+			this.errors.set(error, error);
+		}
+	}
 
-  hasErrors(): boolean {
-    return this.errors.size > 0;
-  }
+	hasErrors(): boolean {
+		return this.errors.size > 0;
+	}
 
-  copyErrors(notification: Notification) {
-    notification.errors.forEach((error, field) => {
-      this.setError(error, field);
-    });
-  }
+	copyErrors(notification: Notification) {
+		notification.errors.forEach((error, field) => {
+			this.setError(error, field);
+		});
+	}
 
-  toJSON() {
-    const errors: Array<string | { [key: string]: string[] }> = [];
+	toJSON() {
+		const errors: Array<string | { [key: string]: string[] }> = [];
 
-    this.errors.forEach((value, key) => {
-      if (typeof value === "string") {
-        errors.push(value);
-      } else {
-        errors.push({ [key]: value });
-      }
-    });
-    return errors;
-  }
+		this.errors.forEach((value, key) => {
+			if (typeof value === "string") {
+				errors.push(value);
+			} else {
+				errors.push({ [key]: value });
+			}
+		});
+		return errors;
+	}
 }

@@ -3,27 +3,27 @@ import { EntityValidationError } from "../../../../shared/domain/validators/vali
 import { Category } from "../../../domain/category.aggregate";
 import { ICategoryRepository } from "../../../domain/category.repository";
 import {
-  CategoryOutput,
-  CategoryOutputMapper,
+	CategoryOutput,
+	CategoryOutputMapper,
 } from "../common/category-output";
 import { CreateCategoryInput } from "./create-category.input";
 
 export class CreateCategoryUseCase
-  implements IUseCase<CreateCategoryInput, CreateCategoryOutput>
+	implements IUseCase<CreateCategoryInput, CreateCategoryOutput>
 {
-  constructor(private readonly categoryRepo: ICategoryRepository) {}
+	constructor(private readonly categoryRepo: ICategoryRepository) {}
 
-  async execute(input: CreateCategoryInput): Promise<CreateCategoryOutput> {
-    const entity = Category.create(input);
+	async execute(input: CreateCategoryInput): Promise<CreateCategoryOutput> {
+		const entity = Category.create(input);
 
-    if (entity.notification.hasErrors()) {
-      throw new EntityValidationError(entity.notification.toJSON());
-    }
+		if (entity.notification.hasErrors()) {
+			throw new EntityValidationError(entity.notification.toJSON());
+		}
 
-    await this.categoryRepo.insert(entity);
+		await this.categoryRepo.insert(entity);
 
-    return CategoryOutputMapper.toOutput(entity);
-  }
+		return CategoryOutputMapper.toOutput(entity);
+	}
 }
 
 export type CreateCategoryOutput = CategoryOutput;

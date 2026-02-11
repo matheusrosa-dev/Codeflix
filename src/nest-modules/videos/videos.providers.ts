@@ -24,135 +24,135 @@ import { ProcessAudioVideoMediasUseCase } from "@core/video/app/use-cases/proces
 import { PublishVideoMediaReplacedInQueueHandler } from "@core/video/app/handlers/publish-video-media-replaced-in-queue.handler";
 
 export const REPOSITORIES = {
-  VIDEO_REPOSITORY: {
-    provide: "VideoRepository",
-    useExisting: VideoSequelizeRepository,
-  },
-  VIDEO_IN_MEMORY_REPOSITORY: {
-    provide: VideoInMemoryRepository,
-    useClass: VideoInMemoryRepository,
-  },
-  VIDEO_SEQUELIZE_REPOSITORY: {
-    provide: VideoSequelizeRepository,
-    useFactory: (videoModel: typeof VideoModel, uow: UnitOfWorkSequelize) => {
-      return new VideoSequelizeRepository(videoModel, uow);
-    },
-    inject: [getModelToken(VideoModel), "UnitOfWork"],
-  },
+	VIDEO_REPOSITORY: {
+		provide: "VideoRepository",
+		useExisting: VideoSequelizeRepository,
+	},
+	VIDEO_IN_MEMORY_REPOSITORY: {
+		provide: VideoInMemoryRepository,
+		useClass: VideoInMemoryRepository,
+	},
+	VIDEO_SEQUELIZE_REPOSITORY: {
+		provide: VideoSequelizeRepository,
+		useFactory: (videoModel: typeof VideoModel, uow: UnitOfWorkSequelize) => {
+			return new VideoSequelizeRepository(videoModel, uow);
+		},
+		inject: [getModelToken(VideoModel), "UnitOfWork"],
+	},
 };
 
 export const USE_CASES = {
-  CREATE_VIDEO_USE_CASE: {
-    provide: CreateVideoUseCase,
-    useFactory: (
-      uow: IUnitOfWork,
-      videoRepo: IVideoRepository,
-      categoriesIdValidator: CategoriesIdExistsInDatabaseValidator,
-      genresIdValidator: GenresIdExistsInDatabaseValidator,
-      castMembersIdValidator: CastMembersIdExistsInDatabaseValidator,
-    ) => {
-      return new CreateVideoUseCase(
-        uow,
-        videoRepo,
-        categoriesIdValidator,
-        genresIdValidator,
-        castMembersIdValidator,
-      );
-    },
-    inject: [
-      "UnitOfWork",
-      REPOSITORIES.VIDEO_REPOSITORY.provide,
-      CATEGORY_PROVIDERS.VALIDATIONS.CATEGORIES_IDS_EXISTS_IN_DATABASE_VALIDATOR
-        .provide,
-      GENRES_PROVIDERS.VALIDATIONS.GENRES_IDS_EXISTS_IN_DATABASE_VALIDATOR
-        .provide,
-      CAST_MEMBERS_PROVIDERS.VALIDATIONS
-        .CAST_MEMBERS_IDS_EXISTS_IN_DATABASE_VALIDATOR.provide,
-    ],
-  },
-  UPDATE_VIDEO_USE_CASE: {
-    provide: UpdateVideoUseCase,
-    useFactory: (
-      uow: IUnitOfWork,
-      videoRepo: IVideoRepository,
-      categoriesIdValidator: CategoriesIdExistsInDatabaseValidator,
-      genresIdValidator: GenresIdExistsInDatabaseValidator,
-      castMembersIdValidator: CastMembersIdExistsInDatabaseValidator,
-    ) => {
-      return new UpdateVideoUseCase(
-        uow,
-        videoRepo,
-        categoriesIdValidator,
-        genresIdValidator,
-        castMembersIdValidator,
-      );
-    },
-    inject: [
-      "UnitOfWork",
-      REPOSITORIES.VIDEO_REPOSITORY.provide,
-      CATEGORY_PROVIDERS.VALIDATIONS.CATEGORIES_IDS_EXISTS_IN_DATABASE_VALIDATOR
-        .provide,
-      GENRES_PROVIDERS.VALIDATIONS.GENRES_IDS_EXISTS_IN_DATABASE_VALIDATOR
-        .provide,
-      CAST_MEMBERS_PROVIDERS.VALIDATIONS
-        .CAST_MEMBERS_IDS_EXISTS_IN_DATABASE_VALIDATOR.provide,
-    ],
-  },
-  UPLOAD_AUDIO_VIDEO_MEDIA_USE_CASE: {
-    provide: UploadAudioVideoMediasUseCase,
-    useFactory: (
-      appService: ApplicationService,
-      videoRepo: IVideoRepository,
-      storage: IStorage,
-    ) => {
-      return new UploadAudioVideoMediasUseCase(appService, videoRepo, storage);
-    },
-    inject: [
-      ApplicationService,
-      REPOSITORIES.VIDEO_REPOSITORY.provide,
-      "IStorage",
-    ],
-  },
-  GET_VIDEO_USE_CASE: {
-    provide: GetVideoUseCase,
-    useFactory: (
-      videoRepo: IVideoRepository,
-      categoryRepo: ICategoryRepository,
-      genreRepo: IGenreRepository,
-      castMemberRepo: ICastMemberRepository,
-    ) => {
-      return new GetVideoUseCase(
-        videoRepo,
-        categoryRepo,
-        genreRepo,
-        castMemberRepo,
-      );
-    },
-    inject: [
-      REPOSITORIES.VIDEO_REPOSITORY.provide,
-      CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
-      GENRES_PROVIDERS.REPOSITORIES.GENRE_REPOSITORY.provide,
-      CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
-    ],
-  },
-  PROCESS_AUDIO_VIDEO_MEDIA_USE_CASE: {
-    provide: ProcessAudioVideoMediasUseCase,
-    useFactory: (uow: IUnitOfWork, videoRepo: IVideoRepository) => {
-      return new ProcessAudioVideoMediasUseCase(uow, videoRepo);
-    },
-    inject: ["UnitOfWork", REPOSITORIES.VIDEO_REPOSITORY.provide],
-  },
+	CREATE_VIDEO_USE_CASE: {
+		provide: CreateVideoUseCase,
+		useFactory: (
+			uow: IUnitOfWork,
+			videoRepo: IVideoRepository,
+			categoriesIdValidator: CategoriesIdExistsInDatabaseValidator,
+			genresIdValidator: GenresIdExistsInDatabaseValidator,
+			castMembersIdValidator: CastMembersIdExistsInDatabaseValidator,
+		) => {
+			return new CreateVideoUseCase(
+				uow,
+				videoRepo,
+				categoriesIdValidator,
+				genresIdValidator,
+				castMembersIdValidator,
+			);
+		},
+		inject: [
+			"UnitOfWork",
+			REPOSITORIES.VIDEO_REPOSITORY.provide,
+			CATEGORY_PROVIDERS.VALIDATIONS.CATEGORIES_IDS_EXISTS_IN_DATABASE_VALIDATOR
+				.provide,
+			GENRES_PROVIDERS.VALIDATIONS.GENRES_IDS_EXISTS_IN_DATABASE_VALIDATOR
+				.provide,
+			CAST_MEMBERS_PROVIDERS.VALIDATIONS
+				.CAST_MEMBERS_IDS_EXISTS_IN_DATABASE_VALIDATOR.provide,
+		],
+	},
+	UPDATE_VIDEO_USE_CASE: {
+		provide: UpdateVideoUseCase,
+		useFactory: (
+			uow: IUnitOfWork,
+			videoRepo: IVideoRepository,
+			categoriesIdValidator: CategoriesIdExistsInDatabaseValidator,
+			genresIdValidator: GenresIdExistsInDatabaseValidator,
+			castMembersIdValidator: CastMembersIdExistsInDatabaseValidator,
+		) => {
+			return new UpdateVideoUseCase(
+				uow,
+				videoRepo,
+				categoriesIdValidator,
+				genresIdValidator,
+				castMembersIdValidator,
+			);
+		},
+		inject: [
+			"UnitOfWork",
+			REPOSITORIES.VIDEO_REPOSITORY.provide,
+			CATEGORY_PROVIDERS.VALIDATIONS.CATEGORIES_IDS_EXISTS_IN_DATABASE_VALIDATOR
+				.provide,
+			GENRES_PROVIDERS.VALIDATIONS.GENRES_IDS_EXISTS_IN_DATABASE_VALIDATOR
+				.provide,
+			CAST_MEMBERS_PROVIDERS.VALIDATIONS
+				.CAST_MEMBERS_IDS_EXISTS_IN_DATABASE_VALIDATOR.provide,
+		],
+	},
+	UPLOAD_AUDIO_VIDEO_MEDIA_USE_CASE: {
+		provide: UploadAudioVideoMediasUseCase,
+		useFactory: (
+			appService: ApplicationService,
+			videoRepo: IVideoRepository,
+			storage: IStorage,
+		) => {
+			return new UploadAudioVideoMediasUseCase(appService, videoRepo, storage);
+		},
+		inject: [
+			ApplicationService,
+			REPOSITORIES.VIDEO_REPOSITORY.provide,
+			"IStorage",
+		],
+	},
+	GET_VIDEO_USE_CASE: {
+		provide: GetVideoUseCase,
+		useFactory: (
+			videoRepo: IVideoRepository,
+			categoryRepo: ICategoryRepository,
+			genreRepo: IGenreRepository,
+			castMemberRepo: ICastMemberRepository,
+		) => {
+			return new GetVideoUseCase(
+				videoRepo,
+				categoryRepo,
+				genreRepo,
+				castMemberRepo,
+			);
+		},
+		inject: [
+			REPOSITORIES.VIDEO_REPOSITORY.provide,
+			CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
+			GENRES_PROVIDERS.REPOSITORIES.GENRE_REPOSITORY.provide,
+			CAST_MEMBERS_PROVIDERS.REPOSITORIES.CAST_MEMBER_REPOSITORY.provide,
+		],
+	},
+	PROCESS_AUDIO_VIDEO_MEDIA_USE_CASE: {
+		provide: ProcessAudioVideoMediasUseCase,
+		useFactory: (uow: IUnitOfWork, videoRepo: IVideoRepository) => {
+			return new ProcessAudioVideoMediasUseCase(uow, videoRepo);
+		},
+		inject: ["UnitOfWork", REPOSITORIES.VIDEO_REPOSITORY.provide],
+	},
 };
 
 export const HANDLERS = {
-  PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
-    provide: PublishVideoMediaReplacedInQueueHandler,
-    useClass: PublishVideoMediaReplacedInQueueHandler,
-  },
+	PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
+		provide: PublishVideoMediaReplacedInQueueHandler,
+		useClass: PublishVideoMediaReplacedInQueueHandler,
+	},
 };
 
 export const VIDEOS_PROVIDERS = {
-  REPOSITORIES,
-  USE_CASES,
-  HANDLERS,
+	REPOSITORIES,
+	USE_CASES,
+	HANDLERS,
 };

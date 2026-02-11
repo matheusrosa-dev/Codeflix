@@ -5,20 +5,20 @@ import { Storage as GoogleCloudStorageSdk } from "@google-cloud/storage";
 
 @Global()
 @Module({
-  providers: [
-    {
-      provide: "IStorage",
-      useFactory: (configService: ConfigService) => {
-        const credentials = configService.get("GOOGLE_CLOUD_CREDENTIALS");
-        const bucket = configService.get("GOOGLE_CLOUD_STORAGE_BUCKET");
-        const storage = new GoogleCloudStorageSdk({
-          credentials,
-        });
-        return new GoogleCloudStorage(storage, bucket);
-      },
-      inject: [ConfigService],
-    },
-  ],
-  exports: ["IStorage"],
+	providers: [
+		{
+			provide: "IStorage",
+			useFactory: (configService: ConfigService) => {
+				const credentials = configService.get("GOOGLE_CLOUD_CREDENTIALS");
+				const bucket = configService.get("GOOGLE_CLOUD_STORAGE_BUCKET");
+				const storage = new GoogleCloudStorageSdk({
+					credentials,
+				});
+				return new GoogleCloudStorage(storage, bucket);
+			},
+			inject: [ConfigService],
+		},
+	],
+	exports: ["IStorage"],
 })
 export class SharedModule {}

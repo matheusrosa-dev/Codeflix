@@ -2,7 +2,7 @@ import { OmitType } from "@nestjs/mapped-types";
 import { UpdateVideoInput } from "@core/video/app/use-cases/update-video/update-video.input";
 
 export class UpdateVideoInputWithoutId extends OmitType(UpdateVideoInput, [
-  "id",
+	"id",
 ] as any) {}
 
 export class UpdateVideoDto extends UpdateVideoInputWithoutId {}

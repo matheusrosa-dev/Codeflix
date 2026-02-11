@@ -3,6 +3,6 @@ import { ConfigModule } from "../config/config.module";
 import { DatabaseModule } from "./database.module";
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule],
+	imports: [ConfigModule.forRoot(), DatabaseModule],
 })
 export class MigrationsModule {}

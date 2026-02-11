@@ -11,121 +11,121 @@ import { IVideoRepository } from "../../../domain/video.repository";
 import { UpdateVideoInput } from "./update-video.input";
 
 export class UpdateVideoUseCase
-  implements IUseCase<UpdateVideoInput, UpdateVideoOutput>
+	implements IUseCase<UpdateVideoInput, UpdateVideoOutput>
 {
-  constructor(
-    private uow: IUnitOfWork,
-    private videoRepo: IVideoRepository,
-    private categoriesIdValidator: CategoriesIdExistsInDatabaseValidator,
-    private genresIdValidator: GenresIdExistsInDatabaseValidator,
-    private castMembersIdValidator: CastMembersIdExistsInDatabaseValidator,
-  ) {}
+	constructor(
+		private uow: IUnitOfWork,
+		private videoRepo: IVideoRepository,
+		private categoriesIdValidator: CategoriesIdExistsInDatabaseValidator,
+		private genresIdValidator: GenresIdExistsInDatabaseValidator,
+		private castMembersIdValidator: CastMembersIdExistsInDatabaseValidator,
+	) {}
 
-  async execute(input: UpdateVideoInput): Promise<UpdateVideoOutput> {
-    const videoId = new VideoId(input.id);
-    const video = await this.videoRepo.findById(videoId);
+	async execute(input: UpdateVideoInput): Promise<UpdateVideoOutput> {
+		const videoId = new VideoId(input.id);
+		const video = await this.videoRepo.findById(videoId);
 
-    if (!video) {
-      throw new NotFoundError(input.id, Video);
-    }
+		if (!video) {
+			throw new NotFoundError(input.id, Video);
+		}
 
-    if (input.title) {
-      video.changeTitle(input.title);
-    }
+		if (input.title) {
+			video.changeTitle(input.title);
+		}
 
-    if (input.description) {
-      video.changeDescription(input.description);
-    }
+		if (input.description) {
+			video.changeDescription(input.description);
+		}
 
-    if (input.year_launched) {
-      video.changeYearLaunched(input.year_launched);
-    }
+		if (input.year_launched) {
+			video.changeYearLaunched(input.year_launched);
+		}
 
-    if (input.duration) {
-      video.changeDuration(input.duration);
-    }
+		if (input.duration) {
+			video.changeDuration(input.duration);
+		}
 
-    if (input.rating) {
-      const [type, errorRating] = Rating.create(input.rating).asArray();
+		if (input.rating) {
+			const [type, errorRating] = Rating.create(input.rating).asArray();
 
-      video.changeRating(type);
+			video.changeRating(type);
 
-      if (errorRating) {
-        video.notification.setError(errorRating.message, "rating");
-      }
-    }
+			if (errorRating) {
+				video.notification.setError(errorRating.message, "rating");
+			}
+		}
 
-    if (input.is_opened === true) {
-      video.markAsOpened();
-    }
+		if (input.is_opened === true) {
+			video.markAsOpened();
+		}
 
-    if (input.is_opened === false) {
-      video.markAsNotOpened();
-    }
+		if (input.is_opened === false) {
+			video.markAsNotOpened();
+		}
 
-    const notification = video.notification;
+		const notification = video.notification;
 
-    if (input.categories_id) {
-      const [categoriesId, errorsCategoriesId] = (
-        await this.categoriesIdValidator.validate(input.categories_id)
-      ).asArray();
+		if (input.categories_id) {
+			const [categoriesId, errorsCategoriesId] = (
+				await this.categoriesIdValidator.validate(input.categories_id)
+			).asArray();
 
-      if (categoriesId) {
-        video.syncCategoriesId(categoriesId);
-      }
+			if (categoriesId) {
+				video.syncCategoriesId(categoriesId);
+			}
 
-      if (errorsCategoriesId) {
-        notification.setError(
-          errorsCategoriesId.map((e) => e.message),
-          "categories_id",
-        );
-      }
-    }
+			if (errorsCategoriesId) {
+				notification.setError(
+					errorsCategoriesId.map((e) => e.message),
+					"categories_id",
+				);
+			}
+		}
 
-    if (input.genres_id) {
-      const [genresId, errorsGenresId] = (
-        await this.genresIdValidator.validate(input.genres_id)
-      ).asArray();
+		if (input.genres_id) {
+			const [genresId, errorsGenresId] = (
+				await this.genresIdValidator.validate(input.genres_id)
+			).asArray();
 
-      if (genresId) {
-        video.syncGenresId(genresId);
-      }
+			if (genresId) {
+				video.syncGenresId(genresId);
+			}
 
-      if (errorsGenresId) {
-        notification.setError(
-          errorsGenresId.map((e) => e.message),
-          "genres_id",
-        );
-      }
-    }
+			if (errorsGenresId) {
+				notification.setError(
+					errorsGenresId.map((e) => e.message),
+					"genres_id",
+				);
+			}
+		}
 
-    if (input.cast_members_id) {
-      const [castMembersId, errorsCastMembersId] = (
-        await this.castMembersIdValidator.validate(input.cast_members_id)
-      ).asArray();
+		if (input.cast_members_id) {
+			const [castMembersId, errorsCastMembersId] = (
+				await this.castMembersIdValidator.validate(input.cast_members_id)
+			).asArray();
 
-      if (castMembersId) {
-        video.syncCastMembersId(castMembersId);
-      }
+			if (castMembersId) {
+				video.syncCastMembersId(castMembersId);
+			}
 
-      if (errorsCastMembersId) {
-        notification.setError(
-          errorsCastMembersId.map((e) => e.message),
-          "cast_members_id",
-        );
-      }
-    }
+			if (errorsCastMembersId) {
+				notification.setError(
+					errorsCastMembersId.map((e) => e.message),
+					"cast_members_id",
+				);
+			}
+		}
 
-    if (video.notification.hasErrors()) {
-      throw new EntityValidationError(video.notification.toJSON());
-    }
+		if (video.notification.hasErrors()) {
+			throw new EntityValidationError(video.notification.toJSON());
+		}
 
-    await this.uow.do(async () => {
-      return this.videoRepo.update(video);
-    });
+		await this.uow.do(async () => {
+			return this.videoRepo.update(video);
+		});
 
-    return { id: video.video_id.id };
-  }
+		return { id: video.video_id.id };
+	}
 }
 
 export type UpdateVideoOutput = { id: string };

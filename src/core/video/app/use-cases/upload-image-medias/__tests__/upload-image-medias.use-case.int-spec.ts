@@ -24,135 +24,135 @@ import { Storage as GoogleCloudStorageSdk } from "@google-cloud/storage";
 import { Config } from "../../../../../shared/infra/config";
 import { GoogleCloudStorage } from "../../../../../shared/infra/storage/google-cloud.storage";
 describe("UploadImageMediasUseCase Integration Tests", () => {
-  let uploadImageMediasUseCase: UploadImageMediasUseCase;
-  let videoRepo: IVideoRepository;
-  let categoryRepo: ICategoryRepository;
-  let genreRepo: IGenreRepository;
-  let castMemberRepo: ICastMemberRepository;
-  let uow: UnitOfWorkSequelize;
-  let storageService: IStorage;
-  const sequelizeHelper = setupSequelizeForVideo();
+	let uploadImageMediasUseCase: UploadImageMediasUseCase;
+	let videoRepo: IVideoRepository;
+	let categoryRepo: ICategoryRepository;
+	let genreRepo: IGenreRepository;
+	let castMemberRepo: ICastMemberRepository;
+	let uow: UnitOfWorkSequelize;
+	let storageService: IStorage;
+	const sequelizeHelper = setupSequelizeForVideo();
 
-  beforeEach(() => {
-    uow = new UnitOfWorkSequelize(sequelizeHelper.sequelize);
-    categoryRepo = new CategorySequelizeRepository(CategoryModel);
-    genreRepo = new GenreSequelizeRepository(GenreModel, uow);
-    castMemberRepo = new CastMemberSequelizeRepository(CastMemberModel);
-    videoRepo = new VideoSequelizeRepository(VideoModel, uow);
-    //storageService = new InMemoryStorage();
-    const storageSdk = new GoogleCloudStorageSdk({
-      credentials: Config.googleCredentials(),
-    });
-    storageService = new GoogleCloudStorage(storageSdk, Config.bucketName());
+	beforeEach(() => {
+		uow = new UnitOfWorkSequelize(sequelizeHelper.sequelize);
+		categoryRepo = new CategorySequelizeRepository(CategoryModel);
+		genreRepo = new GenreSequelizeRepository(GenreModel, uow);
+		castMemberRepo = new CastMemberSequelizeRepository(CastMemberModel);
+		videoRepo = new VideoSequelizeRepository(VideoModel, uow);
+		//storageService = new InMemoryStorage();
+		const storageSdk = new GoogleCloudStorageSdk({
+			credentials: Config.googleCredentials(),
+		});
+		storageService = new GoogleCloudStorage(storageSdk, Config.bucketName());
 
-    uploadImageMediasUseCase = new UploadImageMediasUseCase(
-      uow,
-      videoRepo,
-      storageService,
-    );
-  });
+		uploadImageMediasUseCase = new UploadImageMediasUseCase(
+			uow,
+			videoRepo,
+			storageService,
+		);
+	});
 
-  it("should throw error when video not found", async () => {
-    await expect(
-      uploadImageMediasUseCase.execute({
-        video_id: "4e9e2e4e-4b4a-4b4a-8b8b-8b8b8b8b8b8b",
-        field: "banner",
-        file: {
-          raw_name: "banner.jpg",
-          data: Buffer.from(""),
-          mime_type: "image/jpg",
-          size: 100,
-        },
-      }),
-    ).rejects.toThrow(
-      new NotFoundError("4e9e2e4e-4b4a-4b4a-8b8b-8b8b8b8b8b8b", Video),
-    );
-  });
+	it("should throw error when video not found", async () => {
+		await expect(
+			uploadImageMediasUseCase.execute({
+				video_id: "4e9e2e4e-4b4a-4b4a-8b8b-8b8b8b8b8b8b",
+				field: "banner",
+				file: {
+					raw_name: "banner.jpg",
+					data: Buffer.from(""),
+					mime_type: "image/jpg",
+					size: 100,
+				},
+			}),
+		).rejects.toThrow(
+			new NotFoundError("4e9e2e4e-4b4a-4b4a-8b8b-8b8b8b8b8b8b", Video),
+		);
+	});
 
-  it("should throw error when image is invalid", async () => {
-    expect.assertions(2);
-    const category = Category.fake().oneCategory().build();
-    await categoryRepo.insert(category);
-    const genre = Genre.fake()
-      .oneGenre()
-      .addCategoryId(category.category_id)
-      .build();
-    await genreRepo.insert(genre);
-    const castMember = CastMember.fake().oneActor().build();
-    await castMemberRepo.insert(castMember);
-    const video = Video.fake()
-      .oneVideoWithoutMedias()
-      .addCategoryId(category.category_id)
-      .addGenreId(genre.genre_id)
-      .addCastMemberId(castMember.cast_member_id)
-      .build();
+	it("should throw error when image is invalid", async () => {
+		expect.assertions(2);
+		const category = Category.fake().oneCategory().build();
+		await categoryRepo.insert(category);
+		const genre = Genre.fake()
+			.oneGenre()
+			.addCategoryId(category.category_id)
+			.build();
+		await genreRepo.insert(genre);
+		const castMember = CastMember.fake().oneActor().build();
+		await castMemberRepo.insert(castMember);
+		const video = Video.fake()
+			.oneVideoWithoutMedias()
+			.addCategoryId(category.category_id)
+			.addGenreId(genre.genre_id)
+			.addCastMemberId(castMember.cast_member_id)
+			.build();
 
-    await videoRepo.insert(video);
+		await videoRepo.insert(video);
 
-    try {
-      await uploadImageMediasUseCase.execute({
-        video_id: video.video_id.id,
-        field: "banner",
-        file: {
-          raw_name: "banner.jpg",
-          data: Buffer.from(""),
-          mime_type: "image/jpg",
-          size: 100,
-        },
-      });
-    } catch (error) {
-      expect(error).toBeInstanceOf(EntityValidationError);
-      expect(error.error).toEqual([
-        {
-          banner: [
-            "Invalid media file mime type: image/jpg not in image/jpeg, image/png, image/gif",
-          ],
-        },
-      ]);
-    }
-  }, 10000);
+		try {
+			await uploadImageMediasUseCase.execute({
+				video_id: video.video_id.id,
+				field: "banner",
+				file: {
+					raw_name: "banner.jpg",
+					data: Buffer.from(""),
+					mime_type: "image/jpg",
+					size: 100,
+				},
+			});
+		} catch (error) {
+			expect(error).toBeInstanceOf(EntityValidationError);
+			expect(error.error).toEqual([
+				{
+					banner: [
+						"Invalid media file mime type: image/jpg not in image/jpeg, image/png, image/gif",
+					],
+				},
+			]);
+		}
+	}, 10000);
 
-  it("should upload banner image", async () => {
-    const storeSpy = jest.spyOn(storageService, "store");
-    const category = Category.fake().oneCategory().build();
-    await categoryRepo.insert(category);
-    const genre = Genre.fake()
-      .oneGenre()
-      .addCategoryId(category.category_id)
-      .build();
-    await genreRepo.insert(genre);
-    const castMember = CastMember.fake().oneActor().build();
-    await castMemberRepo.insert(castMember);
-    const video = Video.fake()
-      .oneVideoWithoutMedias()
-      .addCategoryId(category.category_id)
-      .addGenreId(genre.genre_id)
-      .addCastMemberId(castMember.cast_member_id)
-      .build();
+	it("should upload banner image", async () => {
+		const storeSpy = jest.spyOn(storageService, "store");
+		const category = Category.fake().oneCategory().build();
+		await categoryRepo.insert(category);
+		const genre = Genre.fake()
+			.oneGenre()
+			.addCategoryId(category.category_id)
+			.build();
+		await genreRepo.insert(genre);
+		const castMember = CastMember.fake().oneActor().build();
+		await castMemberRepo.insert(castMember);
+		const video = Video.fake()
+			.oneVideoWithoutMedias()
+			.addCategoryId(category.category_id)
+			.addGenreId(genre.genre_id)
+			.addCastMemberId(castMember.cast_member_id)
+			.build();
 
-    await videoRepo.insert(video);
+		await videoRepo.insert(video);
 
-    await uploadImageMediasUseCase.execute({
-      video_id: video.video_id.id,
-      field: "banner",
-      file: {
-        raw_name: "banner.jpg",
-        data: Buffer.from("test data"),
-        mime_type: "image/jpeg",
-        size: 100,
-      },
-    });
+		await uploadImageMediasUseCase.execute({
+			video_id: video.video_id.id,
+			field: "banner",
+			file: {
+				raw_name: "banner.jpg",
+				data: Buffer.from("test data"),
+				mime_type: "image/jpeg",
+				size: 100,
+			},
+		});
 
-    const videoUpdated = await videoRepo.findById(video.video_id);
-    expect(videoUpdated!.banner).toBeDefined();
-    expect(videoUpdated!.banner!.name.includes(".jpg")).toBeTruthy();
-    expect(videoUpdated!.banner!.location).toBe(
-      `videos/${videoUpdated!.video_id.id}/images`,
-    );
-    expect(storeSpy).toHaveBeenCalledWith({
-      data: Buffer.from("test data"),
-      id: videoUpdated!.banner!.url,
-      mime_type: "image/jpeg",
-    });
-  }, 10000);
+		const videoUpdated = await videoRepo.findById(video.video_id);
+		expect(videoUpdated!.banner).toBeDefined();
+		expect(videoUpdated!.banner!.name.includes(".jpg")).toBeTruthy();
+		expect(videoUpdated!.banner!.location).toBe(
+			`videos/${videoUpdated!.video_id.id}/images`,
+		);
+		expect(storeSpy).toHaveBeenCalledWith({
+			data: Buffer.from("test data"),
+			id: videoUpdated!.banner!.url,
+			mime_type: "image/jpeg",
+		});
+	}, 10000);
 });

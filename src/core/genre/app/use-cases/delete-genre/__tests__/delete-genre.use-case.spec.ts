@@ -5,32 +5,32 @@ import { GenreInMemoryRepository } from "../../../../infra/db/in-memory/genre-in
 import { DeleteGenreUseCase } from "../delete-genre.use-case";
 
 describe("DeleteGenreUseCase Unit Tests", () => {
-  let useCase: DeleteGenreUseCase;
-  let repository: GenreInMemoryRepository;
-  let uow: UnitOfWorkFakeInMemory;
+	let useCase: DeleteGenreUseCase;
+	let repository: GenreInMemoryRepository;
+	let uow: UnitOfWorkFakeInMemory;
 
-  beforeEach(() => {
-    uow = new UnitOfWorkFakeInMemory();
-    repository = new GenreInMemoryRepository();
-    useCase = new DeleteGenreUseCase(uow, repository);
-  });
+	beforeEach(() => {
+		uow = new UnitOfWorkFakeInMemory();
+		repository = new GenreInMemoryRepository();
+		useCase = new DeleteGenreUseCase(uow, repository);
+	});
 
-  it("should throws error when entity not found", async () => {
-    const genreId = new GenreId();
+	it("should throws error when entity not found", async () => {
+		const genreId = new GenreId();
 
-    await expect(() => useCase.execute({ id: genreId.id })).rejects.toThrow(
-      new NotFoundError(genreId.id, Genre),
-    );
-  });
+		await expect(() => useCase.execute({ id: genreId.id })).rejects.toThrow(
+			new NotFoundError(genreId.id, Genre),
+		);
+	});
 
-  it("should delete a genre", async () => {
-    const items = [Genre.fake().oneGenre().build()];
-    repository.items = items;
-    const spyOnDo = jest.spyOn(uow, "do");
-    await useCase.execute({
-      id: items[0].genre_id.id,
-    });
-    expect(spyOnDo).toHaveBeenCalledTimes(1);
-    expect(repository.items).toHaveLength(0);
-  });
+	it("should delete a genre", async () => {
+		const items = [Genre.fake().oneGenre().build()];
+		repository.items = items;
+		const spyOnDo = jest.spyOn(uow, "do");
+		await useCase.execute({
+			id: items[0].genre_id.id,
+		});
+		expect(spyOnDo).toHaveBeenCalledTimes(1);
+		expect(repository.items).toHaveLength(0);
+	});
 });

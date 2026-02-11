@@ -6,28 +6,28 @@ import { IGenreRepository } from "../../../domain/genre.repository";
 import { GenreOutput, GenreOutputMapper } from "../common/genre-output";
 
 export class GetGenreUseCase
-  implements IUseCase<GetGenreInput, GetGenreOutput>
+	implements IUseCase<GetGenreInput, GetGenreOutput>
 {
-  constructor(
-    private genreRepo: IGenreRepository,
-    private categoryRepo: ICategoryRepository,
-  ) {}
+	constructor(
+		private genreRepo: IGenreRepository,
+		private categoryRepo: ICategoryRepository,
+	) {}
 
-  async execute(input: GetGenreInput): Promise<GetGenreOutput> {
-    const genreId = new GenreId(input.id);
-    const genre = await this.genreRepo.findById(genreId);
-    if (!genre) {
-      throw new NotFoundError(input.id, Genre);
-    }
-    const categories = await this.categoryRepo.findByIds([
-      ...genre.categories_id.values(),
-    ]);
-    return GenreOutputMapper.toOutput(genre, categories);
-  }
+	async execute(input: GetGenreInput): Promise<GetGenreOutput> {
+		const genreId = new GenreId(input.id);
+		const genre = await this.genreRepo.findById(genreId);
+		if (!genre) {
+			throw new NotFoundError(input.id, Genre);
+		}
+		const categories = await this.categoryRepo.findByIds([
+			...genre.categories_id.values(),
+		]);
+		return GenreOutputMapper.toOutput(genre, categories);
+	}
 }
 
 export type GetGenreInput = {
-  id: string;
+	id: string;
 };
 
 export type GetGenreOutput = GenreOutput;

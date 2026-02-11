@@ -5,28 +5,28 @@ import { CollectionPresenter } from "../../nest-modules/shared/collection.presen
 import { CastMemberOutput } from "@core/cast-member/app/use-cases/common/cast-member-output";
 
 export class CastMemberPresenter {
-  id: string;
-  name: string;
-  type: CastMemberTypes;
-  @Transform(({ value }: { value: Date }) => {
-    return value.toISOString();
-  })
-  created_at: Date;
+	id: string;
+	name: string;
+	type: CastMemberTypes;
+	@Transform(({ value }: { value: Date }) => {
+		return value.toISOString();
+	})
+	created_at: Date;
 
-  constructor(output: CastMemberOutput) {
-    this.id = output.id;
-    this.name = output.name;
-    this.type = output.type;
-    this.created_at = output.created_at;
-  }
+	constructor(output: CastMemberOutput) {
+		this.id = output.id;
+		this.name = output.name;
+		this.type = output.type;
+		this.created_at = output.created_at;
+	}
 }
 
 export class CastMemberCollectionPresenter extends CollectionPresenter {
-  data: CastMemberPresenter[];
+	data: CastMemberPresenter[];
 
-  constructor(output: ListCastMembersOutput) {
-    const { items, ...paginationProps } = output;
-    super(paginationProps);
-    this.data = items.map((item) => new CastMemberPresenter(item));
-  }
+	constructor(output: ListCastMembersOutput) {
+		const { items, ...paginationProps } = output;
+		super(paginationProps);
+		this.data = items.map((item) => new CastMemberPresenter(item));
+	}
 }

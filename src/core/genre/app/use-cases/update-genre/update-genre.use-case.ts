@@ -10,70 +10,70 @@ import { GenreOutput, GenreOutputMapper } from "../common/genre-output";
 import { UpdateGenreInput } from "./update-genre.input";
 
 export class UpdateGenreUseCase
-  implements IUseCase<UpdateGenreInput, UpdateGenreOutput>
+	implements IUseCase<UpdateGenreInput, UpdateGenreOutput>
 {
-  constructor(
-    private uow: IUnitOfWork,
-    private genreRepo: IGenreRepository,
-    private categoryRepo: ICategoryRepository,
-    private CategoriesIdExistsInDatabaseValidator: CategoriesIdExistsInDatabaseValidator,
-  ) {}
+	constructor(
+		private uow: IUnitOfWork,
+		private genreRepo: IGenreRepository,
+		private categoryRepo: ICategoryRepository,
+		private CategoriesIdExistsInDatabaseValidator: CategoriesIdExistsInDatabaseValidator,
+	) {}
 
-  async execute(input: UpdateGenreInput): Promise<UpdateGenreOutput> {
-    const genreId = new GenreId(input.id);
-    const genre = await this.genreRepo.findById(genreId);
+	async execute(input: UpdateGenreInput): Promise<UpdateGenreOutput> {
+		const genreId = new GenreId(input.id);
+		const genre = await this.genreRepo.findById(genreId);
 
-    if (!genre) {
-      throw new NotFoundError(input.id, Genre);
-    }
+		if (!genre) {
+			throw new NotFoundError(input.id, Genre);
+		}
 
-    if (input.name) {
-      genre.changeName(input.name);
-    }
+		if (input.name) {
+			genre.changeName(input.name);
+		}
 
-    if (input.is_active === true) {
-      genre.activate();
-    }
+		if (input.is_active === true) {
+			genre.activate();
+		}
 
-    if (input.is_active === false) {
-      genre.deactivate();
-    }
+		if (input.is_active === false) {
+			genre.deactivate();
+		}
 
-    const notification = genre.notification;
+		const notification = genre.notification;
 
-    if (input.categories_id) {
-      const [categoriesId, errorsCategoriesId] = (
-        await this.CategoriesIdExistsInDatabaseValidator.validate(
-          input.categories_id,
-        )
-      ).asArray();
+		if (input.categories_id) {
+			const [categoriesId, errorsCategoriesId] = (
+				await this.CategoriesIdExistsInDatabaseValidator.validate(
+					input.categories_id,
+				)
+			).asArray();
 
-      if (categoriesId) {
-        genre.syncCategoriesId(categoriesId);
-      }
+			if (categoriesId) {
+				genre.syncCategoriesId(categoriesId);
+			}
 
-      if (errorsCategoriesId) {
-        notification.setError(
-          errorsCategoriesId.map((e) => e.message),
-          "categories_id",
-        );
-      }
-    }
+			if (errorsCategoriesId) {
+				notification.setError(
+					errorsCategoriesId.map((e) => e.message),
+					"categories_id",
+				);
+			}
+		}
 
-    if (genre.notification.hasErrors()) {
-      throw new EntityValidationError(genre.notification.toJSON());
-    }
+		if (genre.notification.hasErrors()) {
+			throw new EntityValidationError(genre.notification.toJSON());
+		}
 
-    await this.uow.do(async () => {
-      return this.genreRepo.update(genre);
-    });
+		await this.uow.do(async () => {
+			return this.genreRepo.update(genre);
+		});
 
-    const categories = await this.categoryRepo.findByIds(
-      Array.from(genre.categories_id.values()),
-    );
+		const categories = await this.categoryRepo.findByIds(
+			Array.from(genre.categories_id.values()),
+		);
 
-    return GenreOutputMapper.toOutput(genre, categories);
-  }
+		return GenreOutputMapper.toOutput(genre, categories);
+	}
 }
 
 export type UpdateGenreOutput = GenreOutput;

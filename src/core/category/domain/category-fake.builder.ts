@@ -4,127 +4,127 @@ import { Category, CategoryId } from "./category.aggregate";
 type PropOrFactory<T> = T | ((index: number) => T);
 
 export class CategoryFakeBuilder<TBuild = any> {
-  private _category_id?: PropOrFactory<CategoryId>;
-  private _name: PropOrFactory<string> = (_index) => this.chance.word();
-  private _description: PropOrFactory<string | null> = (_index) =>
-    this.chance.paragraph();
-  private _is_active: PropOrFactory<boolean> = (_index) => true;
-  private _created_at?: PropOrFactory<Date>;
+	private _category_id?: PropOrFactory<CategoryId>;
+	private _name: PropOrFactory<string> = (_index) => this.chance.word();
+	private _description: PropOrFactory<string | null> = (_index) =>
+		this.chance.paragraph();
+	private _is_active: PropOrFactory<boolean> = (_index) => true;
+	private _created_at?: PropOrFactory<Date>;
 
-  private categoriesAmount;
+	private categoriesAmount;
 
-  static oneCategory() {
-    return new CategoryFakeBuilder<Category>();
-  }
+	static oneCategory() {
+		return new CategoryFakeBuilder<Category>();
+	}
 
-  static manyCategories(categoriesAmount: number) {
-    return new CategoryFakeBuilder<Category[]>(categoriesAmount);
-  }
+	static manyCategories(categoriesAmount: number) {
+		return new CategoryFakeBuilder<Category[]>(categoriesAmount);
+	}
 
-  private chance: Chance.Chance;
+	private chance: Chance.Chance;
 
-  private constructor(categoriesAmount: number = 1) {
-    this.categoriesAmount = categoriesAmount;
-    this.chance = Chance();
-  }
+	private constructor(categoriesAmount: number = 1) {
+		this.categoriesAmount = categoriesAmount;
+		this.chance = Chance();
+	}
 
-  withCategoryId(valueOrFactory: PropOrFactory<CategoryId>) {
-    this._category_id = valueOrFactory;
-    return this;
-  }
+	withCategoryId(valueOrFactory: PropOrFactory<CategoryId>) {
+		this._category_id = valueOrFactory;
+		return this;
+	}
 
-  withName(valueOrFactory: PropOrFactory<string>) {
-    this._name = valueOrFactory;
-    return this;
-  }
+	withName(valueOrFactory: PropOrFactory<string>) {
+		this._name = valueOrFactory;
+		return this;
+	}
 
-  withDescription(valueOrFactory: PropOrFactory<string | null>) {
-    this._description = valueOrFactory;
-    return this;
-  }
+	withDescription(valueOrFactory: PropOrFactory<string | null>) {
+		this._description = valueOrFactory;
+		return this;
+	}
 
-  activate() {
-    this._is_active = true;
-    return this;
-  }
+	activate() {
+		this._is_active = true;
+		return this;
+	}
 
-  deactivate() {
-    this._is_active = false;
-    return this;
-  }
+	deactivate() {
+		this._is_active = false;
+		return this;
+	}
 
-  withCreatedAt(valueOrFactory: PropOrFactory<Date>) {
-    this._created_at = valueOrFactory;
-    return this;
-  }
+	withCreatedAt(valueOrFactory: PropOrFactory<Date>) {
+		this._created_at = valueOrFactory;
+		return this;
+	}
 
-  withInvalidNameTooLong(value?: string) {
-    this._name = value ?? this.chance.word({ length: 256 });
-    return this;
-  }
+	withInvalidNameTooLong(value?: string) {
+		this._name = value ?? this.chance.word({ length: 256 });
+		return this;
+	}
 
-  build(): TBuild {
-    const categories = new Array(this.categoriesAmount)
-      .fill(undefined)
-      .map((_, index) => {
-        const category = new Category({
-          category_id: !this._category_id
-            ? undefined
-            : this.callFactory(this._category_id, index),
+	build(): TBuild {
+		const categories = new Array(this.categoriesAmount)
+			.fill(undefined)
+			.map((_, index) => {
+				const category = new Category({
+					category_id: !this._category_id
+						? undefined
+						: this.callFactory(this._category_id, index),
 
-          name: this.callFactory(this._name, index),
+					name: this.callFactory(this._name, index),
 
-          description: this.callFactory(this._description, index),
+					description: this.callFactory(this._description, index),
 
-          is_active: this.callFactory(this._is_active, index),
-          ...(this._created_at && {
-            created_at: this.callFactory(this._created_at, index),
-          }),
-        });
+					is_active: this.callFactory(this._is_active, index),
+					...(this._created_at && {
+						created_at: this.callFactory(this._created_at, index),
+					}),
+				});
 
-        category.validate();
+				category.validate();
 
-        return category;
-      });
+				return category;
+			});
 
-    return (this.categoriesAmount === 1 ? categories[0] : categories) as TBuild;
-  }
+		return (this.categoriesAmount === 1 ? categories[0] : categories) as TBuild;
+	}
 
-  get category_id() {
-    return this.getValue("category_id") as CategoryId;
-  }
+	get category_id() {
+		return this.getValue("category_id") as CategoryId;
+	}
 
-  get name() {
-    return this.getValue("name") as string;
-  }
+	get name() {
+		return this.getValue("name") as string;
+	}
 
-  get description() {
-    return this.getValue("description") as string;
-  }
+	get description() {
+		return this.getValue("description") as string;
+	}
 
-  get is_active() {
-    return this.getValue("is_active") as boolean;
-  }
+	get is_active() {
+		return this.getValue("is_active") as boolean;
+	}
 
-  get created_at() {
-    return this.getValue("created_at") as Date;
-  }
+	get created_at() {
+		return this.getValue("created_at") as Date;
+	}
 
-  private getValue(prop: string) {
-    const optional = ["category_id", "created_at"];
-    const privateProp = `_${prop}` as keyof this;
+	private getValue(prop: string) {
+		const optional = ["category_id", "created_at"];
+		const privateProp = `_${prop}` as keyof this;
 
-    if (!this[privateProp] && optional.includes(prop)) {
-      throw new Error(
-        `Property ${prop} not have a factory, use 'with' methods`,
-      );
-    }
-    return this.callFactory(this[privateProp], 0);
-  }
+		if (!this[privateProp] && optional.includes(prop)) {
+			throw new Error(
+				`Property ${prop} not have a factory, use 'with' methods`,
+			);
+		}
+		return this.callFactory(this[privateProp], 0);
+	}
 
-  private callFactory(factoryOrValue: PropOrFactory<any>, index: number) {
-    return typeof factoryOrValue === "function"
-      ? factoryOrValue(index)
-      : factoryOrValue;
-  }
+	private callFactory(factoryOrValue: PropOrFactory<any>, index: number) {
+		return typeof factoryOrValue === "function"
+			? factoryOrValue(index)
+			: factoryOrValue;
+	}
 }

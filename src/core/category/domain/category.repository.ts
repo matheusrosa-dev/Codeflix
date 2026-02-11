@@ -10,10 +10,10 @@ export class CategorySearchParams extends SearchParams<CategorySearchTerm> {}
 export class CategorySearchResult extends SearchResult<Category> {}
 
 export interface ICategoryRepository
-  extends ISearchableRepository<
-    Category,
-    CategoryId,
-    CategorySearchTerm,
-    CategorySearchParams,
-    CategorySearchResult
-  > {}
+	extends ISearchableRepository<
+		Category,
+		CategoryId,
+		CategorySearchTerm,
+		CategorySearchParams,
+		CategorySearchResult
+	> {}

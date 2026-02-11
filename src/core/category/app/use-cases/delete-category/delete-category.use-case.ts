@@ -3,18 +3,18 @@ import { CategoryId } from "../../../domain/category.aggregate";
 import { ICategoryRepository } from "../../../domain/category.repository";
 
 export class DeleteCategoryUseCase
-  implements IUseCase<DeleteCategoryInput, DeleteCategoryOutput>
+	implements IUseCase<DeleteCategoryInput, DeleteCategoryOutput>
 {
-  constructor(private categoryRepo: ICategoryRepository) {}
+	constructor(private categoryRepo: ICategoryRepository) {}
 
-  async execute(input: DeleteCategoryInput): Promise<DeleteCategoryOutput> {
-    const categoryId = new CategoryId(input.id);
-    await this.categoryRepo.delete(categoryId);
-  }
+	async execute(input: DeleteCategoryInput): Promise<DeleteCategoryOutput> {
+		const categoryId = new CategoryId(input.id);
+		await this.categoryRepo.delete(categoryId);
+	}
 }
 
 export type DeleteCategoryInput = {
-  id: string;
+	id: string;
 };
 
 type DeleteCategoryOutput = void;

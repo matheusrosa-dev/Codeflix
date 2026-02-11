@@ -5,34 +5,34 @@ import { CategoryInMemoryRepository } from "../../../../infra/db/in-memory/categ
 import { DeleteCategoryUseCase } from "../delete-category.use-case";
 
 describe("DeleteCategoryUseCase Unit Tests", () => {
-  let useCase: DeleteCategoryUseCase;
-  let repository: CategoryInMemoryRepository;
+	let useCase: DeleteCategoryUseCase;
+	let repository: CategoryInMemoryRepository;
 
-  beforeEach(() => {
-    repository = new CategoryInMemoryRepository();
-    useCase = new DeleteCategoryUseCase(repository);
-  });
+	beforeEach(() => {
+		repository = new CategoryInMemoryRepository();
+		useCase = new DeleteCategoryUseCase(repository);
+	});
 
-  it("should throws error when entity not found", async () => {
-    await expect(() => useCase.execute({ id: "fake id" })).rejects.toThrow(
-      new InvalidUuidError(),
-    );
+	it("should throws error when entity not found", async () => {
+		await expect(() => useCase.execute({ id: "fake id" })).rejects.toThrow(
+			new InvalidUuidError(),
+		);
 
-    const categoryId = new CategoryId();
+		const categoryId = new CategoryId();
 
-    await expect(() => useCase.execute({ id: categoryId.id })).rejects.toThrow(
-      new NotFoundError(categoryId.id, Category),
-    );
-  });
+		await expect(() => useCase.execute({ id: categoryId.id })).rejects.toThrow(
+			new NotFoundError(categoryId.id, Category),
+		);
+	});
 
-  it("should delete a category", async () => {
-    const items = [new Category({ name: "test 1" })];
-    repository.items = items;
+	it("should delete a category", async () => {
+		const items = [new Category({ name: "test 1" })];
+		repository.items = items;
 
-    await useCase.execute({
-      id: items[0].category_id.id,
-    });
+		await useCase.execute({
+			id: items[0].category_id.id,
+		});
 
-    expect(repository.items).toHaveLength(0);
-  });
+		expect(repository.items).toHaveLength(0);
+	});
 });
