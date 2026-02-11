@@ -7,6 +7,8 @@ services:
   #     - "3333:3333"
   #   volumes:
   #     - .:/home/node/app
+        # - '/etc/timezone:/etc/timezone:ro'
+        # - '/etc/localtime:/etc/localtime:ro'
 
   db:
     container_name: micro_videos_dev-db
@@ -20,3 +22,11 @@ services:
       - ./.docker/dbdata:/var/lib/mysql:delegated
     security_opt:
       - seccomp:unconfined
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    ports:
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
