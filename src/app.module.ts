@@ -8,6 +8,7 @@ import { GenresModule } from "./nest-modules/genres/genres.module";
 import { VideosModule } from "./nest-modules/videos/videos.module";
 import { UseCaseModule } from "./nest-modules/use-cases/use-cases.module";
 import { EventModule } from "./nest-modules/events/events.module";
+import { RabbitmqModule } from "./nest-modules/rabbitmq/rabbitmq.module";
 
 @Module({
 	imports: [
@@ -20,6 +21,7 @@ import { EventModule } from "./nest-modules/events/events.module";
 		CastMembersModule,
 		GenresModule,
 		VideosModule,
+		RabbitmqModule.forRoot(),
 	],
 })
 export class AppModule {}

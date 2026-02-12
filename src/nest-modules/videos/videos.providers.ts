@@ -22,6 +22,7 @@ import { UploadAudioVideoMediasUseCase } from "@core/video/app/use-cases/upload-
 import { GetVideoUseCase } from "@core/video/app/use-cases/get-video/get-video.use-case";
 import { ProcessAudioVideoMediasUseCase } from "@core/video/app/use-cases/process-audio-video-medias/process-audio-video-medias.use-case";
 import { PublishVideoMediaReplacedInQueueHandler } from "@core/video/app/handlers/publish-video-media-replaced-in-queue.handler";
+import { IMessageBroker } from "@core/shared/app/message-broker.interface";
 
 export const REPOSITORIES = {
 	VIDEO_REPOSITORY: {
@@ -147,7 +148,10 @@ export const USE_CASES = {
 export const HANDLERS = {
 	PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
 		provide: PublishVideoMediaReplacedInQueueHandler,
-		useClass: PublishVideoMediaReplacedInQueueHandler,
+		useFactory: (messageBroker: IMessageBroker) => {
+			return new PublishVideoMediaReplacedInQueueHandler(messageBroker);
+		},
+		inject: ["IMessageBroker"],
 	},
 };
 
