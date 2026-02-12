@@ -6,13 +6,13 @@ import { ProcessAudioVideoMediasUseCase } from "@core/video/app/use-cases/proces
 import { ModuleRef } from "@nestjs/core";
 import { RabbitmqConsumeErrorFilter } from "../rabbitmq/rabbitmq-consume-error/rabbitmq-consume-error.filter";
 
-@UseFilters(new RabbitmqConsumeErrorFilter())
+@UseFilters(RabbitmqConsumeErrorFilter)
 @Injectable()
 export class VideosConsumers {
 	constructor(private moduleRef: ModuleRef) {}
 
 	@RabbitSubscribe({
-		exchange: "amq.direct",
+		exchange: "direct.delayed",
 		routingKey: "videos.convert",
 		queue: "micro-videos/admin",
 		allowNonJsonMessages: true,
