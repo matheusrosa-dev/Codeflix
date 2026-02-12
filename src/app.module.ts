@@ -13,15 +13,15 @@ import { RabbitmqModule } from "./nest-modules/rabbitmq/rabbitmq.module";
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
-		DatabaseModule,
 		SharedModule,
+		DatabaseModule,
 		EventModule,
 		UseCaseModule,
+		RabbitmqModule.forRoot(),
 		CategoriesModule,
 		CastMembersModule,
 		GenresModule,
 		VideosModule,
-		RabbitmqModule.forRoot(),
 	],
 })
 export class AppModule {}

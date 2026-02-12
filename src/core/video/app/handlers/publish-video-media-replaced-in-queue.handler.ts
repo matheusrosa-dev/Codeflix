@@ -6,12 +6,10 @@ import { IMessageBroker } from "../../../shared/app/message-broker.interface";
 export class PublishVideoMediaReplacedInQueueHandler
 	implements IIntegrationEventHandler
 {
-	constructor(private messageBroker: IMessageBroker) {
-		console.log(messageBroker);
-	}
+	constructor(private messageBroker: IMessageBroker) {}
 
 	@OnEvent(VideoAudioMediaUploadedIntegrationEvent.name)
 	async handle(event: VideoAudioMediaUploadedIntegrationEvent): Promise<void> {
-		console.log(event);
+		await this.messageBroker.publishEvent(event);
 	}
 }
