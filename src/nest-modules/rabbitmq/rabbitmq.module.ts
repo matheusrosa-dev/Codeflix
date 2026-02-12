@@ -11,6 +11,19 @@ export class RabbitmqModule {
 				RabbitMQModule.forRootAsync({
 					useFactory: (configService: ConfigService) => ({
 						uri: configService.get("RABBITMQ_URI") as string,
+						exchanges: [
+							{
+								name: "dlx.exchange",
+								type: "topic",
+							},
+						],
+						queues: [
+							{
+								name: "dlx.queue",
+								exchange: "dlx.exchange",
+								routingKey: "#", //aceito qualquer routing key
+							},
+						],
 					}),
 					inject: [ConfigService],
 				}),
