@@ -6,7 +6,7 @@ import { GENRES_PROVIDERS } from "./genres.providers";
 import {
 	GenreCategoryModel,
 	GenreModel,
-} from "../../core/genre/infra/db/sequelize/genre.model";
+} from "@core/genre/infra/db/sequelize/genre.model";
 
 @Module({
 	imports: [

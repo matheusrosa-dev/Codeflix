@@ -1,6 +1,6 @@
-import { Category } from "../../../core/category/domain/category.aggregate";
-import { Genre } from "../../../core/genre/domain/genre.aggregate";
-import { SortDirection } from "../../../core/shared/domain/repository/search-params";
+import { Category } from "@core/category/domain/category.aggregate";
+import { Genre } from "@core/genre/domain/genre.aggregate";
+import { SortDirection } from "@core/shared/domain/repository/search-params";
 
 const _keysInResponse = [
 	"id",

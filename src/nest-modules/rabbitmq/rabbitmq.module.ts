@@ -1,7 +1,7 @@
 import { AmqpConnection, RabbitMQModule } from "@golevelup/nestjs-rabbitmq";
 import { DynamicModule } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { RabbitMQMessageBroker } from "../../core/shared/infra/message-broker/rabbitmq-message-broker";
+import { RabbitMQMessageBroker } from "@core/shared/infra/message-broker/rabbitmq-message-broker";
 
 export class RabbitmqModule {
 	static forRoot(): DynamicModule {

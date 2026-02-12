@@ -3,10 +3,10 @@ import { GenresController } from "../genres.controller";
 import { GenreCollectionPresenter, GenrePresenter } from "../genres.presenter";
 import { CreateGenreDto } from "../dto/create-genre.dto";
 import { UpdateGenreDto } from "../dto/update-genre.dto";
-import { CreateGenreOutput } from "../../../core/genre/app/use-cases/create-genre/create-genre.use-case";
-import { UpdateGenreOutput } from "../../../core/genre/app/use-cases/update-genre/update-genre.use-case";
-import { GetGenreOutput } from "../../../core/genre/app/use-cases/get-genre/get-genre.use-case";
-import { ListGenresOutput } from "../../../core/genre/app/use-cases/list-genres/list-genres.use-case";
+import { CreateGenreOutput } from "@core/genre/app/use-cases/create-genre/create-genre.use-case";
+import { UpdateGenreOutput } from "@core/genre/app/use-cases/update-genre/update-genre.use-case";
+import { GetGenreOutput } from "@core/genre/app/use-cases/get-genre/get-genre.use-case";
+import { ListGenresOutput } from "@core/genre/app/use-cases/list-genres/list-genres.use-case";
 
 describe("GenresController Unit Tests", () => {
 	let controller: GenresController;

@@ -1,5 +1,5 @@
 import { OmitType } from "@nestjs/mapped-types";
-import { UpdateGenreInput } from "../../../core/genre/app/use-cases/update-genre/update-genre.input";
+import { UpdateGenreInput } from "@core/genre/app/use-cases/update-genre/update-genre.input";
 
 export class UpdateGenreInputWithoutId extends OmitType(UpdateGenreInput, [
 	"id",

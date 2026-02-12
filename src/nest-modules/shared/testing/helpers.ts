@@ -4,7 +4,7 @@ import { AppModule } from "../../../app.module";
 import { applyGlobalConfig } from "../../global-config";
 import { getConnectionToken } from "@nestjs/sequelize";
 import { Sequelize } from "sequelize-typescript";
-import { UnitOfWorkSequelize } from "../../../core/shared/infra/db/sequelize/unit-of-work-sequelize";
+import { UnitOfWorkSequelize } from "@core/shared/infra/db/sequelize/unit-of-work-sequelize";
 
 export function startApp() {
 	let _app: INestApplication;
