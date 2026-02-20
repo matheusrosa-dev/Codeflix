@@ -39,7 +39,7 @@ describe("DatabaseModule Unit Tests", () => {
 	describe("mysql connection", () => {
 		const connOptions = {
 			DB_VENDOR: "mysql",
-			DB_HOST: "localhost",
+			DB_HOST: "micro_videos_dev-db",
 			DB_DATABASE: "micro_videos",
 			DB_USERNAME: "root",
 			DB_PASSWORD: "root",
