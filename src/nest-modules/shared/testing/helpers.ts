@@ -5,6 +5,7 @@ import { applyGlobalConfig } from "../../global-config";
 import { getConnectionToken } from "@nestjs/sequelize";
 import { Sequelize } from "sequelize-typescript";
 import { UnitOfWorkSequelize } from "@core/shared/infra/db/sequelize/unit-of-work-sequelize";
+import { AmqpConnection } from "@golevelup/nestjs-rabbitmq";
 
 export function startApp() {
 	let _app: INestApplication;
@@ -31,6 +32,16 @@ export function startApp() {
 	});
 
 	afterEach(async () => {
+		try {
+			const amqpConnection = _app?.get<AmqpConnection>(AmqpConnection);
+			await amqpConnection?.managedConnection?.close();
+		} catch {}
+
+		try {
+			const sequelize = _app?.get<Sequelize>(getConnectionToken());
+			await sequelize?.close();
+		} catch {}
+
 		await _app?.close();
 	});
 
