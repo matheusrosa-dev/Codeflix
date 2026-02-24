@@ -19,6 +19,9 @@ describe("VideoFakerBuilder Unit Tests", () => {
 			expect(() => faker.video_id).toThrow(
 				new Error("Property video_id not have a factory, use 'with' methods"),
 			);
+
+			// to fail
+			expect(false).toBeTruthy();
 		});
 
 		test("should be undefined", () => {
