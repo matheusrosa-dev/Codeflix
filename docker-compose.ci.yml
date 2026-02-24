@@ -13,7 +13,6 @@ services:
       - db
       - rabbitmq
     environment:
-      - GOOGLE_CLOUD_STORAGE_BUCKET
       - GOOGLE_CLOUD_CREDENTIALS
 
   db:
