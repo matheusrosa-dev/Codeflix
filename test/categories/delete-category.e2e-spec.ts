@@ -7,6 +7,26 @@ import { Category } from "../../src/core/category/domain/category.aggregate";
 describe("CategoriesController (e2e)", () => {
 	describe("/delete/:id (DELETE)", () => {
 		const appHelper = startApp();
+
+		describe("unauthenticated", () => {
+			const app = startApp();
+
+			test("should return 401 when not authenticated", () => {
+				return request(app.app.getHttpServer())
+					.delete("/categories/any-id")
+					.send({})
+					.expect(401);
+			});
+
+			test("should return 403 when not authenticated as admin", () => {
+				return request(app.app.getHttpServer())
+					.delete("/categories/any-id")
+					.authenticate(app.app, false)
+					.send({})
+					.expect(403);
+			});
+		});
+
 		describe("should a response error when id is invalid or not found", () => {
 			const arrange = [
 				{
@@ -31,6 +51,7 @@ describe("CategoriesController (e2e)", () => {
 			test.each(arrange)("when id is $id", async ({ id, expected }) => {
 				return request(appHelper.app.getHttpServer())
 					.delete(`/categories/${id}`)
+					.authenticate(appHelper.app)
 					.expect(expected.statusCode)
 					.expect(expected);
 			});
@@ -45,6 +66,7 @@ describe("CategoriesController (e2e)", () => {
 
 			await request(appHelper.app.getHttpServer())
 				.delete(`/categories/${category.category_id.id}`)
+				.authenticate(appHelper.app)
 				.expect(204);
 
 			await expect(

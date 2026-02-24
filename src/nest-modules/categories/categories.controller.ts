@@ -10,6 +10,7 @@ import {
 	ParseUUIDPipe,
 	HttpCode,
 	Query,
+	UseGuards,
 } from "@nestjs/common";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
 import { CreateCategoryUseCase } from "@core/category/app/use-cases/create-category/create-category.use-case";
@@ -24,7 +25,10 @@ import {
 } from "./categories.presenter";
 import { CategoryOutput } from "@core/category/app/use-cases/common/category-output";
 import { SearchCategoriesDto } from "./dto/search-categories.dto";
+import { AuthGuard } from "../auth/auth.guard";
+import { CheckIsAdminGuard } from "../auth/check-is-admin.guard";
 
+@UseGuards(AuthGuard, CheckIsAdminGuard)
 @Controller("categories")
 export class CategoriesController {
 	@Inject(CreateCategoryUseCase)

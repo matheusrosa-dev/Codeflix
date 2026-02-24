@@ -21,6 +21,7 @@ import {
 } from "../categories.presenter";
 import { CategoryOutputMapper } from "@core/category/app/use-cases/common/category-output";
 import { Category, CategoryId } from "@core/category/domain/category.aggregate";
+import { AuthModule } from "../../auth/auth.module";
 
 describe("CategoriesController Integration Tests", () => {
 	let controller: CategoriesController;
@@ -28,7 +29,12 @@ describe("CategoriesController Integration Tests", () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			imports: [ConfigModule.forRoot(), DatabaseModule, CategoriesModule],
+			imports: [
+				ConfigModule.forRoot(),
+				DatabaseModule,
+				AuthModule,
+				CategoriesModule,
+			],
 		}).compile();
 		controller = module.get<CategoriesController>(CategoriesController);
 		repository = module.get<ICategoryRepository>(

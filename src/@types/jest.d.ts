@@ -1,4 +1,4 @@
-import { ValueObject } from "../shared/domain/value-object";
+import { ValueObject } from "@core/shared/domain/value-object";
 
 declare global {
 	namespace jest {

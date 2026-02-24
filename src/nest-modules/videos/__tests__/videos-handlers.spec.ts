@@ -10,6 +10,7 @@ import { UnitOfWorkFakeInMemory } from "@core/shared/infra/db/in-memory/fake-uni
 import { AmqpConnection } from "@golevelup/nestjs-rabbitmq";
 import { UseCaseModule } from "../../use-cases/use-cases.module";
 import { DynamicModule } from "@nestjs/common";
+import { AuthModule } from "../../auth/auth.module";
 
 class RabbitmqModuleFake {
 	static forRoot(): DynamicModule {
@@ -39,6 +40,7 @@ describe("VideosModule Unit Tests", () => {
 				EventModule,
 				UseCaseModule,
 				DatabaseModule,
+				AuthModule,
 				RabbitmqModuleFake.forRoot(),
 				VideosModule,
 			],

@@ -9,8 +9,27 @@ import { Category } from "../../src/core/category/domain/category.aggregate";
 import { GetCategoryFixture } from "../../src/nest-modules/categories/testing/category-fixture";
 
 describe("CategoriesController (e2e)", () => {
-	const nestApp = startApp();
+	const appHelper = startApp();
 	describe("/categories/:id (GET)", () => {
+		describe("unauthenticated", () => {
+			const app = startApp();
+
+			test("should return 401 when not authenticated", () => {
+				return request(app.app.getHttpServer())
+					.get("/categories/any-id")
+					.send({})
+					.expect(401);
+			});
+
+			test("should return 403 when not authenticated as admin", () => {
+				return request(app.app.getHttpServer())
+					.get("/categories/any-id")
+					.authenticate(app.app, false)
+					.send({})
+					.expect(403);
+			});
+		});
+
 		describe("should a response error when id is invalid or not found", () => {
 			const arrange = [
 				{
@@ -33,22 +52,24 @@ describe("CategoriesController (e2e)", () => {
 			];
 
 			test.each(arrange)("when id is $id", async ({ id, expected }) => {
-				return request(nestApp.app.getHttpServer())
+				return request(appHelper.app.getHttpServer())
 					.get(`/categories/${id}`)
+					.authenticate(appHelper.app)
 					.expect(expected.statusCode)
 					.expect(expected);
 			});
 		});
 
 		it("should return a category ", async () => {
-			const categoryRepo = nestApp.app.get<ICategoryRepository>(
+			const categoryRepo = appHelper.app.get<ICategoryRepository>(
 				CategoryProviders.REPOSITORIES.CATEGORY_REPOSITORY.provide,
 			);
 			const category = Category.fake().oneCategory().build();
 			await categoryRepo.insert(category);
 
-			const res = await request(nestApp.app.getHttpServer())
+			const res = await request(appHelper.app.getHttpServer())
 				.get(`/categories/${category.category_id.id}`)
+				.authenticate(appHelper.app)
 				.expect(200);
 			const keyInResponse = GetCategoryFixture.keysInResponse;
 			expect(Object.keys(res.body)).toStrictEqual(["data"]);
