@@ -1,32 +1,44 @@
 services:
   app:
-    container_name: micro_videos-app
+    container_name: micro_videos_dev-app
     build: .
     command: bash ./.docker/start.sh
     ports:
       - "3333:3333"
     volumes:
       - .:/home/node/app
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/etc/localtime:/etc/localtime:ro"
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
 
   db:
-    container_name: micro_videos-db
+    container_name: micro_videos_dev-db
     image: mysql:8.0.30-debian
     environment:
       - MYSQL_DATABASE=micro_videos
       - MYSQL_ROOT_PASSWORD=root
-    tmpfs:
-      - /var/lib/mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql:delegated
     security_opt:
       - seccomp:unconfined
 
   rabbitmq:
-    container_name: micro_videos-rabbitmq
+    container_name: micro_videos_dev-rabbitmq
     build: ./.docker/rabbitmq
     image: rabbitmq:3.8-management-alpine
     ports:
       - 15672:15672
+      - 5672:5672
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    command: start-dev
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin

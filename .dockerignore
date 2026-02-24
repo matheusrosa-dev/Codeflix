@@ -1,0 +1,14 @@
+.git/
+.github/
+.docker/dbdata/
+.docker/rabbitmq/
+dist/
+envs/
+node_modules/
+docker-compose*.yml
+*.md
+api.http
+create-rsa.js
+generate-token.js
+Dockerfile
+Dockerfile.prod
