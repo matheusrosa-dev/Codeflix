@@ -79,7 +79,7 @@ jobs:
         run: docker compose -f docker-compose.ci.yml up -d
 
       - name: wait for mysql
-        run: docker compose -f docker-compose.ci.yml exec -T mysql mysqladmin ping --silent --wait=30 -u root -p root
+        run: docker compose -f docker-compose.ci.yml exec -T mysql mysqladmin ping --silent --wait=30 -uroot -proot
 
       # # Sign the resulting Docker image digest except on PRs.
       # # This will only write to the public Rekor transparency log when the Docker
